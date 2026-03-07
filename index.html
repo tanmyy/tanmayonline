@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>tanmay.online</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://kit.fontawesome.com/4b8b8b9c7f.js" crossorigin="anonymous"></script>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+font-family:'Montserrat', sans-serif;
+color:white;
+overflow:hidden;
+transition:1.5s;
+}
+
+/* wire */
+
+.wire{
+position:absolute;
+top:0;
+width:3px;
+height:160px;
+background:#888;
+}
+
+/* bulb */
+
+.bulb{
+width:75px;
+cursor:pointer;
+animation:swing 3s ease-in-out infinite;
+transform-origin:top center;
+z-index:3;
+}
+
+@keyframes swing{
+0%{ transform:rotate(-3deg); }
+50%{ transform:rotate(3deg); }
+100%{ transform:rotate(-3deg); }
+}
+
+/* bulb glow */
+
+.light-on{
+box-shadow:
+0 0 40px #fff,
+0 0 80px #fff,
+0 0 140px #fff,
+0 0 200px rgba(255,255,255,0.6);
+}
+
+/* spotlight cone */
+
+.light-beam{
+position:absolute;
+top:140px;
+width:600px;
+height:600px;
+background:radial-gradient(circle at top,
+rgba(255,255,255,0.35) 0%,
+rgba(255,255,255,0.15) 25%,
+rgba(255,255,255,0.05) 50%,
+rgba(0,0,0,0) 70%);
+clip-path:polygon(50% 0%,100% 100%,0% 100%);
+opacity:0;
+transition:1.2s;
+z-index:1;
+}
+
+.light-beam.on{
+opacity:1;
+}
+
+/* content */
+
+.content{
+opacity:0;
+transform:translateY(20px);
+transition:1.5s;
+text-align:center;
+margin-top:40px;
+z-index:3;
+}
+
+.content.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* heading */
+
+h1{
+font-size:54px;
+letter-spacing:4px;
+margin-bottom:10px;
+}
+
+.subtitle{
+font-size:18px;
+opacity:0.85;
+}
+
+/* social */
+
+.social{
+margin-top:30px;
+display:flex;
+gap:35px;
+justify-content:center;
+}
+
+.social a{
+color:white;
+font-size:30px;
+transition:0.3s;
+}
+
+.social a:hover{
+transform:scale(1.25);
+color:#3a86ff;
+}
+
+/* particles */
+
+.particle{
+position:absolute;
+width:4px;
+height:4px;
+background:white;
+border-radius:50%;
+opacity:0.6;
+animation:float 6s infinite linear;
+z-index:2;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+100%{transform:translateY(-120vh)}
+}
+
+/* mobile */
+
+@media(max-width:768px){
+
+h1{
+font-size:34px;
+}
+
+.bulb{
+width:60px;
+}
+
+.light-beam{
+width:400px;
+height:500px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="wire"></div>
+
+<img id="bulb" class="bulb"
+src="https://cdn-icons-png.flaticon.com/512/3076/3076227.png">
+
+<div id="beam" class="light-beam"></div>
+
+<div id="content" class="content">
+
+<h1>COMING SOON</h1>
+
+<p class="subtitle">tanmay.online</p>
+
+<div class="social">
+
+<a href="https://instagram.com/tanmayykataria" target="_blank">
+<i class="fab fa-instagram"></i>
+</a>
+
+<a href="https://linkedin.com/in/tanmaykataria/" target="_blank">
+<i class="fab fa-linkedin"></i>
+</a>
+
+</div>
+
+</div>
+
+<audio id="clickSound"
+src="https://assets.mixkit.co/sfx/preview/mixkit-light-switch-on-2585.mp3"></audio>
+
+<script>
+
+const bulb = document.getElementById("bulb")
+const content = document.getElementById("content")
+const beam = document.getElementById("beam")
+const sound = document.getElementById("clickSound")
+
+bulb.onclick = function(){
+
+sound.play()
+
+bulb.classList.add("light-on")
+beam.classList.add("on")
+
+document.body.style.background =
+"radial-gradient(circle at center, #1c2541 0%, #000000 70%)"
+
+content.classList.add("show")
+
+createParticles()
+
+}
+
+function createParticles(){
+
+for(let i=0;i<30;i++){
+
+let p=document.createElement("div")
+p.className="particle"
+
+p.style.left=Math.random()*100+"vw"
+p.style.top=Math.random()*100+"vh"
+p.style.animationDuration=(4+Math.random()*4)+"s"
+
+document.body.appendChild(p)
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
