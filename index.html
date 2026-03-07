@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta charset="UTF-8">
@@ -23,47 +22,51 @@ flex-direction:column;
 font-family:'Montserrat', sans-serif;
 color:white;
 overflow:hidden;
-transition:1s;
+}
+
+/* lamp container */
+
+.lamp{
+position:absolute;
+top:0;
+left:50%;
+transform-origin:top center;
 }
 
 /* string */
 
 .string{
-position:absolute;
-top:0;
 width:3px;
 height:160px;
-background:#aaa;
-transform-origin:top center;
+background:#ccc;
+margin:0 auto;
 }
 
 /* bulb */
 
 .bulb{
 width:70px;
+display:block;
+margin:0 auto;
 cursor:pointer;
-position:absolute;
-top:160px;
-transform-origin:top center;
-transition:0.2s;
+transform: rotate(180deg);
 }
 
-/* glow when light on */
+/* glow */
 
 .bulb.on{
-box-shadow:
-0 0 40px #fff,
-0 0 80px #fff,
-0 0 150px rgba(255,255,255,0.7);
+filter:drop-shadow(0 0 20px white)
+drop-shadow(0 0 40px white)
+drop-shadow(0 0 80px rgba(255,255,255,0.6));
 }
 
 /* text */
 
 .content{
 opacity:0;
-transition:1s;
+transition:0.6s;
 text-align:center;
-margin-top:120px;
+margin-top:180px;
 }
 
 .content.show{
@@ -71,7 +74,7 @@ opacity:1;
 }
 
 h1{
-font-size:54px;
+font-size:56px;
 letter-spacing:4px;
 margin-bottom:10px;
 }
@@ -88,7 +91,7 @@ width:3px;
 height:3px;
 background:white;
 border-radius:50%;
-opacity:0.6;
+opacity:0.7;
 }
 
 /* social icons */
@@ -111,6 +114,20 @@ transform:scale(1.2);
 color:#3a86ff;
 }
 
+/* mobile */
+
+@media(max-width:768px){
+
+h1{
+font-size:36px;
+}
+
+.bulb{
+width:60px;
+}
+
+}
+
 </style>
 
 <script src="https://kit.fontawesome.com/4b8b8b9c7f.js" crossorigin="anonymous"></script>
@@ -119,10 +136,13 @@ color:#3a86ff;
 
 <body>
 
-<div id="string" class="string"></div>
+<div id="lamp" class="lamp">
 
-<img id="bulb" class="bulb"
-src="image-1ORQgJEOeHL8zTZtZJnfhRlNAu9Urh (1).png">
+<div class="string"></div>
+
+<img id="bulb" class="bulb" src="bulb.png">
+
+</div>
 
 <div id="content" class="content">
 
@@ -146,64 +166,44 @@ src="image-1ORQgJEOeHL8zTZtZJnfhRlNAu9Urh (1).png">
 
 <script>
 
+const lamp = document.getElementById("lamp")
 const bulb = document.getElementById("bulb")
-const string = document.getElementById("string")
 const content = document.getElementById("content")
 
-let lightOn = false
+let lightOn=false
+let stars=[]
 
 /* toggle light */
 
 bulb.onclick = function(){
 
-lightOn = !lightOn
+lightOn=!lightOn
 
 if(lightOn){
 
 bulb.classList.add("on")
-document.body.style.background =
-"radial-gradient(circle,#1c2541 0%,#000 70%)"
+document.body.style.background="#0b132b"
 
 content.classList.add("show")
+
+createStars()
 
 }else{
 
 bulb.classList.remove("on")
-document.body.style.background = "black"
+document.body.style.background="black"
 
 content.classList.remove("show")
 
-}
+removeStars()
 
 }
 
-/* drag bulb physics */
-
-let dragging=false
-
-bulb.addEventListener("mousedown",()=>{
-dragging=true
-})
-
-document.addEventListener("mouseup",()=>{
-dragging=false
-})
-
-document.addEventListener("mousemove",(e)=>{
-
-if(!dragging) return
-
-let center=window.innerWidth/2
-let offset=e.clientX-center
-
-let rotate=offset/20
-
-bulb.style.transform="rotate("+rotate+"deg)"
-string.style.transform="rotate("+rotate+"deg)"
-
-})
+}
 
 /* stars */
+
+function createStars(){
 
 for(let i=0;i<60;i++){
 
@@ -215,10 +215,40 @@ s.style.top=Math.random()*100+"vh"
 
 document.body.appendChild(s)
 
+stars.push(s)
+
 }
+
+}
+
+function removeStars(){
+
+stars.forEach(s=>s.remove())
+stars=[]
+
+}
+
+/* pendulum drag */
+
+let dragging=false
+
+lamp.addEventListener("mousedown",()=>dragging=true)
+document.addEventListener("mouseup",()=>dragging=false)
+
+document.addEventListener("mousemove",(e)=>{
+
+if(!dragging) return
+
+let center=window.innerWidth/2
+let offset=e.clientX-center
+
+let rotate=offset/15
+
+lamp.style.transform="rotate("+rotate+"deg)"
+
+})
 
 </script>
 
 </body>
-
 </html>
