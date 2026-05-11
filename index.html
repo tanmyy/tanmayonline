@@ -871,7 +871,9 @@
       transition: opacity 0.3s ease;
       pointer-events: none;
     }
-    #project-adometer-card:hover .adometer-play-hint { opacity: 1; }
+    @media (hover: hover) {
+      #project-adometer-card:hover .adometer-play-hint { opacity: 1; }
+    }
     .adometer-play-circle {
       width: 60px; height: 60px; border-radius: 50%;
       background: rgba(255,255,255,0.2);
@@ -1093,7 +1095,9 @@
 
         <!-- Adometer — VIDEO PICKER -->
         <div class="project-card" id="project-adometer-card" onclick="openAdometerModal()" style="cursor:pointer;">
-          <div class="adometer-bg"><span class="adometer-bg-label">ADS</span></div>
+        <div class="adometer-bg">
+          <img src="adometer1.png" alt="Adometer" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
           <div class="project-overlay"></div>
           <div class="adometer-play-hint">
             <div class="adometer-play-circle">
@@ -1543,7 +1547,7 @@
     <div class="video-modal">
       <button class="video-modal-close" onclick="closeAdometerModal()" aria-label="Close">✕</button>
       <div class="video-player-wrap">
-        <video id="adometer-video" controls preload="none" poster="adometer1.png">
+        <video id="adometer-video" controls preload="none" poster="adometer1.png" style="background:#000;">
           <source id="adometer-source" src="paushta bread ad.mp4" type="video/mp4">
           Your browser does not support HTML5 video.
         </video>
