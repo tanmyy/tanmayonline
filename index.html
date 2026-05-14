@@ -716,6 +716,43 @@
     from { opacity: 0; transform: translate(-50%, -44%) scale(0.9); }
     to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
+      /* ── HERO SPACING FIX ── */
+.hero {
+  padding: 90px 24px 40px;
+  text-align: left;
+}
+.hero-eyebrow {
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+.hero-text h1 {
+  font-size: 40px;
+  margin-bottom: 14px;
+}
+.hero-subtitle {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+/* ── BUTTONS NOT FULL WIDTH ── */
+.hero-ctas {
+  justify-content: flex-start;
+  flex-direction: row;
+  gap: 10px;
+}
+.btn {
+  width: auto !important;
+  padding: 12px 22px;
+  font-size: 0.75rem;
+}
+
+/* ── GRID SQUARES TIGHTER ── */
+.hero-grid-squares {
+  margin-top: 28px;
+}
+.grid-square {
+  height: 68px !important;
+}
 
 }
   </style>
