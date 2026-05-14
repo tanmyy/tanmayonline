@@ -658,6 +658,34 @@
   .footer-brand {
     font-size: 0.82rem;
   }
+}@media (max-width: 768px) {
+
+  /* ... all the stuff you already added ... */
+
+  /* ── HERO HEADING PADDING ── */
+  .hero-content {
+    padding: 0 4px;
+  }
+  .hero-text h1 {
+    font-size: 34px;
+    padding-right: 8px;
+  }
+
+  /* ── SQUARE MENU ── */
+  .sq-menu {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    min-width: 260px;
+    max-width: 88vw;
+    z-index: 9999;
+  }
+  @keyframes sqPop {
+    from { opacity: 0; transform: translate(-50%, -44%) scale(0.9); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
 }
   </style>
 </head>
