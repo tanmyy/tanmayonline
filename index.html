@@ -532,14 +532,15 @@
             <a href="#contact" class="btn btn-outline">Let's Collaborate</a>
           </div>
         </div>
-        <div class="hero-grid-squares">
-          <div class="grid-square">Reels</div>
-          <div class="grid-square">Posters</div>
-          <div class="grid-square">Growth</div>
-          <div class="grid-square">Branding</div>
-          <div class="grid-square">Content</div>
-          <div class="grid-square">Ads</div>
-        </div>
+       <div class="hero-grid-squares">
+  <div class="grid-square" onclick="openSquareMenu('reels', this)">Reels</div>
+  <div class="grid-square" onclick="openSquareMenu('posters', this)">Posters</div>
+  <div class="grid-square" onclick="openSquareMenu('growth', this)">Growth</div>
+  <div class="grid-square" onclick="openSquareMenu('branding', this)">Branding</div>
+  <div class="grid-square" onclick="openSquareMenu('content', this)">Content</div>
+  <div class="grid-square" onclick="openSquareMenu('ads', this)">Ads</div>
+</div>
+        
       </div>
     </div>
   </section>
@@ -1237,6 +1238,56 @@
 
   z-index:10;
 }
+  /* ─── SQUARE MENU POPUP ─────────────────────────────── */
+.sq-menu {
+  position: absolute;
+  z-index: 200;
+  background: #0f0f0f;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 8px;
+  min-width: 220px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.7);
+  animation: sqPop 0.2s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes sqPop {
+  from { opacity: 0; transform: scale(0.88) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.sq-menu-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  padding: 8px 12px 6px;
+}
+.sq-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.sq-menu-item:hover {
+  background: rgba(0,51,255,0.18);
+  color: #fff;
+}
+.sq-menu-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
 
 </style>
 
@@ -1255,7 +1306,116 @@ function closeResumeModal(){
     .getElementById("resumeModal")
     .classList.remove("open");
 }
+// ─── SQUARE MENU DATA ────────────────────────────────
+const SQUARE_MENUS = {
+  reels: {
+    label: 'Reels',
+    color: '#0077ff',
+    options: [
+      { label: 'my1hour Reels',      action: () => { openGallery('my1hour'); switchTab(1); } },
+      { label: 'Spiral Growth Reels',action: () => { openGallery('spiral');  switchTab(1); } },
+      { label: 'Adometer Ad Reels',  action: () => openGallery('adometer') },
+    ]
+  },
+  posters: {
+    label: 'Posters',
+    color: '#ffc300',
+    options: [
+      { label: 'my1hour Designs',    action: () => openGallery('my1hour') },
+      { label: 'Melodiverse Designs',action: () => openGallery('melodiverse') },
+      { label: 'SKG Graphics',       action: () => openGallery('skg') },
+    ]
+  },
+  growth: {
+    label: 'Growth',
+    color: '#ff6b35',
+    options: [
+      { label: 'Spiral Growth Reels',action: () => { openGallery('spiral');  switchTab(1); } },
+      { label: 'Spiral Designs',     action: () => openGallery('spiral') },
+      { label: 'my1hour Social',     action: () => openGallery('my1hour') },
+    ]
+  },
+  branding: {
+    label: 'Branding',
+    color: '#2d6a4f',
+    options: [
+      { label: 'SKG Builders',       action: () => openGallery('skg') },
+      { label: 'Melodiverse',        action: () => openGallery('melodiverse') },
+      { label: 'AMCO Industries',    action: () => openGallery('amco') },
+    ]
+  },
+  content: {
+    label: 'Content',
+    color: '#7c3aed',
+    options: [
+      { label: 'my1hour Content',    action: () => openGallery('my1hour') },
+      { label: 'AMCO Product Visuals',action: () => openGallery('amco') },
+      { label: 'Adometer Creatives', action: () => openGallery('adometer') },
+    ]
+  },
+  ads: {
+    label: 'Ads',
+    color: '#00a8e8',
+    options: [
+      { label: 'Adometer Ad Reels',  action: () => openGallery('adometer') },
+      { label: 'Spiral Campaigns',   action: () => { openGallery('spiral'); switchTab(1); } },
+      { label: 'AMCO Visuals',       action: () => openGallery('amco') },
+    ]
+  }
+};
 
+let activeSqMenu = null;
+
+function openSquareMenu(key, el) {
+  // Close if same one clicked again
+  if (activeSqMenu && activeSqMenu.dataset.key === key) {
+    closeSqMenu(); return;
+  }
+  closeSqMenu();
+
+  const data = SQUARE_MENUS[key];
+  const menu = document.createElement('div');
+  menu.className = 'sq-menu';
+  menu.dataset.key = key;
+
+  menu.innerHTML = `
+    <div class="sq-menu-title">${data.label}</div>
+    ${data.options.map(opt => `
+      <button class="sq-menu-item">
+        <span class="sq-menu-dot" style="background:${data.color};"></span>
+        ${opt.label}
+      </button>
+    `).join('')}
+  `;
+
+  // Attach click handlers
+  menu.querySelectorAll('.sq-menu-item').forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      closeSqMenu();
+      data.options[i].action();
+    });
+  });
+
+  // Position relative to the hero section
+  document.querySelector('.hero').appendChild(menu);
+  const r = el.getBoundingClientRect();
+  const hr = document.querySelector('.hero').getBoundingClientRect();
+  menu.style.top  = (r.bottom - hr.top + 10) + 'px';
+  menu.style.left = Math.min(r.left - hr.left, hr.width - 234) + 'px';
+
+  activeSqMenu = menu;
+}
+
+function closeSqMenu() {
+  if (activeSqMenu) { activeSqMenu.remove(); activeSqMenu = null; }
+}
+
+// Close on outside click
+document.addEventListener('click', e => {
+  if (activeSqMenu && !e.target.closest('.grid-square') && !e.target.closest('.sq-menu')) {
+    closeSqMenu();
+  }
+});
 </script>
 
 </body>
