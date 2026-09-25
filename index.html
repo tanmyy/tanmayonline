@@ -882,10 +882,11 @@
   <div class="grid-square" onclick="openSquareMenu('content', this)">Content</div>
   <div class="grid-square" onclick="openSquareMenu('ads', this)">Ads</div>
 </div>
-        
-      </div>
-    </div>
-  </section>
+<p class="tap-hint">↑ Tap to explore</p>
+
+  </div>
+  </div>
+</div>
 
   <!-- WORK -->
   <section id="work">
@@ -1641,6 +1642,21 @@
   padding: 12px 16px;
   font-size: 0.72rem;
 }
+  .tap-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 10px;
+  text-align: center;
+  animation: fadeInOut 2.5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
 </style>
 
 <script>
@@ -1659,71 +1675,114 @@ function closeResumeModal(){
     .classList.remove("open");
 }
 // ─── SQUARE MENU DATA ────────────────────────────────
-const SQUARE_MENUS = {
+const CATEGORY_GALLERIES = {
   reels: {
-    label: 'Reels',
-    color: '#0077ff',
-    options: [
-      { label: 'my1hour Reels',      action: () => { openGallery('my1hour'); switchTab(1); } },
-      { label: 'Spiral Growth Reels',action: () => { openGallery('spiral');  switchTab(1); } },
-      { label: 'Adometer Ad Reels',  action: () => openGallery('adometer') },
-    ]
+    label: 'Reels', color: '#0077ff',
+    tabs: [{ label: 'Videos', type: 'videos', items: ['m1.mp4','m2.mp4','m3.mp4','m4.mp4','m5.mp4','m6.mp4','m7.mp4','spiral1.mp4','spiral2.mp4','spiral3.mp4','spiral4.mp4','paushta bread ad.mp4','prembasket.mp4','risingcareers.mp4','arigoy.mp4','greenmilites.mp4'] }]
   },
   posters: {
-    label: 'Posters',
-    color: '#ffc300',
-    options: [
-      { label: 'my1hour Designs',    action: () => openGallery('my1hour') },
-      { label: 'Melodiverse Designs',action: () => openGallery('melodiverse') },
-      { label: 'SKG Graphics',       action: () => openGallery('skg') },
-    ]
+    label: 'Posters', color: '#ffc300',
+    tabs: [{ label: 'Images', type: 'images', items: ['my1.png','my2.png','my3.png','my4.png','my5.png','my6.png','my7.png','my8.png','melo1.png','melo2.png','melo3.png','melo4.jpg','melo5.png','skg1.png','skg2.jpg','skg3.jpg','skg4.jpg','adoptlua.png','adoptdexter.png','sourcecoverprint.png','pridefashionshow.png'] }]
   },
   growth: {
-    label: 'Growth',
-    color: '#ff6b35',
-    options: [
-      { label: 'Spiral Growth Reels',action: () => { openGallery('spiral');  switchTab(1); } },
-      { label: 'Spiral Designs',     action: () => openGallery('spiral') },
-      { label: 'my1hour Social',     action: () => openGallery('my1hour') },
+    label: 'Growth', color: '#ff6b35',
+    tabs: [
+      { label: 'Images', type: 'images', items: ['sgs1.jpg','sgs2.jpg','sgs3.jpg','sgs4.jpg','my1.png','my2.png','my3.png','my4.png'] },
+      { label: 'Videos', type: 'videos', items: ['spiral1.mp4','spiral2.mp4','spiral3.mp4','spiral4.mp4','m1.mp4','m2.mp4','m3.mp4'] }
     ]
   },
   branding: {
-    label: 'Branding',
-    color: '#2d6a4f',
-    options: [
-      { label: 'SKG Builders',       action: () => openGallery('skg') },
-      { label: 'Melodiverse',        action: () => openGallery('melodiverse') },
-      { label: 'AMCO Industries',    action: () => openGallery('amco') },
-    ]
+    label: 'Branding', color: '#2d6a4f',
+    tabs: [{ label: 'Images', type: 'images', items: ['skg1.png','skg2.jpg','skg3.jpg','skg4.jpg','melo1.png','melo2.png','melo3.png','melo4.jpg','melo5.png','amco1.png','amco2.png','amco3.png','amco4.png','amco5.png','amco6.png'] }]
   },
   content: {
-    label: 'Content',
-    color: '#7c3aed',
-    options: [
-      { label: 'my1hour Content',    action: () => openGallery('my1hour') },
-      { label: 'AMCO Product Visuals',action: () => openGallery('amco') },
-      { label: 'Adometer Creatives', action: () => openGallery('adometer') },
+    label: 'Content', color: '#7c3aed',
+    tabs: [
+      { label: 'Images', type: 'images', items: ['my1.png','my2.png','my3.png','my4.png','my5.png','my6.png','my7.png','my8.png','amco1.png','amco2.png','amco3.png','amco4.png','amco5.png','amco6.png'] },
+      { label: 'Videos', type: 'videos', items: ['m1.mp4','m2.mp4','m3.mp4','m4.mp4','paushta bread ad.mp4','prembasket.mp4','risingcareers.mp4','arigoy.mp4','greenmilites.mp4'] }
     ]
   },
   ads: {
-    label: 'Ads',
-    color: '#00a8e8',
-    options: [
-      { label: 'Adometer Ad Reels',  action: () => openGallery('adometer') },
-      { label: 'Spiral Campaigns',   action: () => { openGallery('spiral'); switchTab(1); } },
-      { label: 'AMCO Visuals',       action: () => openGallery('amco') },
+    label: 'Ads', color: '#00a8e8',
+    tabs: [
+      { label: 'Videos', type: 'videos', items: ['paushta bread ad.mp4','prembasket.mp4','risingcareers.mp4','arigoy.mp4','greenmilites.mp4','spiral1.mp4','spiral2.mp4','spiral3.mp4','spiral4.mp4'] },
+      { label: 'Images', type: 'images', items: ['sgs1.jpg','sgs2.jpg','sgs3.jpg','sgs4.jpg'] }
     ]
   }
 };
 
 let activeSqMenu = null;
 
-function openSquareMenu(key, el) {
-  // Close if same one clicked again
-  if (activeSqMenu && activeSqMenu.dataset.key === key) {
-    closeSqMenu(); return;
+function openSquareMenu(key) {
+  const data = CATEGORY_GALLERIES[key];
+  if (!data) return;
+
+  document.getElementById('ugm-title').textContent = data.label;
+  document.getElementById('ugm-subtitle').textContent = 'Category Gallery';
+
+  const tabBar = document.getElementById('ugm-tabs');
+  tabBar.innerHTML = '';
+  data.tabs.forEach((tab, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ugm-tab' + (i === 0 ? ' ugm-tab-active' : '');
+    btn.textContent = tab.label;
+    btn.onclick = () => {
+      document.querySelectorAll('.ugm-tab').forEach((t, j) => t.classList.toggle('ugm-tab-active', j === i));
+      renderCategoryTab(data, i);
+    };
+    tabBar.appendChild(btn);
+  });
+  tabBar.style.display = data.tabs.length <= 1 ? 'none' : 'flex';
+
+  renderCategoryTab(data, 0);
+  document.getElementById('ugm-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderCategoryTab(data, index) {
+  const tab = data.tabs[index];
+  const content = document.getElementById('ugm-content');
+  content.scrollTop = 0;
+
+  const items = [...tab.items].sort(() => Math.random() - 0.5);
+
+  if (tab.type === 'images') {
+    lbImages = items;
+    content.innerHTML = `
+      <div class="ugm-img-grid">
+        ${items.map((src, i) => `
+          <div class="ugm-thumb" onclick="openLightbox(${i})">
+            <img src="${src}" alt="image ${i+1}" loading="lazy" />
+            <div class="ugm-thumb-hover">
+              <div class="ugm-zoom-icon">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+  } else {
+    content.innerHTML = `
+      <div class="ugm-video-grid">
+        ${items.map(src => `
+          <div class="ugm-video-wrap">
+            <video controls preload="metadata" style="width:100%;height:100%;display:block;object-fit:contain;background:#000;">
+              <source src="${src}" type="video/mp4">
+            </video>
+            <button class="ugm-fullscreen-btn" onclick="requestFullscreen(this)">
+              <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+          </div>
+        `).join('')}
+      </div>`;
   }
-  closeSqMenu();
+}
+
+function closeSqMenu() { activeSqMenu = null; }
+
+document.addEventListener('click', e => {
+  if (activeSqMenu && !e.target.closest('.grid-square')) closeSqMenu();
+});
 
   const data = SQUARE_MENUS[key];
   const menu = document.createElement('div');
