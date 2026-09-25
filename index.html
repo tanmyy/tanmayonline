@@ -1784,42 +1784,7 @@ document.addEventListener('click', e => {
   if (activeSqMenu && !e.target.closest('.grid-square')) closeSqMenu();
 });
 
-  const data = SQUARE_MENUS[key];
-  const menu = document.createElement('div');
-  menu.className = 'sq-menu';
-  menu.dataset.key = key;
-
-  menu.innerHTML = `
-    <div class="sq-menu-title">${data.label}</div>
-    ${data.options.map(opt => `
-      <button class="sq-menu-item">
-        <span class="sq-menu-dot" style="background:${data.color};"></span>
-        ${opt.label}
-      </button>
-    `).join('')}
-  `;
-
-  // Attach click handlers
-  menu.querySelectorAll('.sq-menu-item').forEach((btn, i) => {
-    btn.addEventListener('click', () => {
-      closeSqMenu();
-      data.options[i].action();
-    });
-  });
-
-  // Position relative to the hero section
-  document.querySelector('.hero').appendChild(menu);
-  const r = el.getBoundingClientRect();
-  const hr = document.querySelector('.hero').getBoundingClientRect();
-  menu.style.top  = (r.bottom - hr.top + 10) + 'px';
-  menu.style.left = Math.min(r.left - hr.left, hr.width - 234) + 'px';
-
-  activeSqMenu = menu;
-}
-
-function closeSqMenu() {
-  if (activeSqMenu) { activeSqMenu.remove(); activeSqMenu = null; }
-}
+  
 
 // Close on outside click
 document.addEventListener('click', e => {
