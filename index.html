@@ -881,11 +881,9 @@
   <div class="grid-square" onclick="openSquareMenu('branding', this)">Branding</div>
   <div class="grid-square" onclick="openSquareMenu('content', this)">Content</div>
   <div class="grid-square" onclick="openSquareMenu('ads', this)">Ads</div>
-</div>
-<p class="tap-hint">↑ Tap to explore</p>
+  <p class="tap-hint">↑ Tap to explore</p>
 
-  </div>
-  </div>
+  
 </div>
 
   <!-- WORK -->
@@ -1682,7 +1680,7 @@ const CATEGORY_GALLERIES = {
   },
   posters: {
     label: 'Posters', color: '#ffc300',
-    tabs: [{ label: 'Images', type: 'images', items: ['my1.png','my2.png','my3.png','my4.png','my5.png','my6.png','my7.png','my8.png','melo1.png','melo2.png','melo3.png','melo4.jpg','melo5.png','skg1.png','skg2.jpg','skg3.jpg','skg4.jpg','adoptdlua.png','adoptddexter.png','sourcecoverprint.png','pridefashionshow.png'] }]
+    tabs: [{ label: 'Images', type: 'images', items: ['my1.png','my2.png','my3.png','my4.png','my5.png','my6.png','my7.png','my8.png','adoptdlua.png','adoptddexter.png','sourcecoverprint.png','pridefashionshow.png', 'comp1.jpg', 'sgs2.jpg'] }]
   },
   growth: {
     label: 'Growth', color: '#ff6b35',
@@ -1716,6 +1714,7 @@ let activeSqMenu = null;
 function openSquareMenu(key) {
   const data = CATEGORY_GALLERIES[key];
   if (!data) return;
+  currentProject = { title: data.label };   // ← the ONE new line
 
   document.getElementById('ugm-title').textContent = data.label;
   document.getElementById('ugm-subtitle').textContent = 'Category Gallery';
