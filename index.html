@@ -445,7 +445,7 @@
   content:'';position:absolute;inset:8px;border-radius:6px;pointer-events:none;z-index:30;
   background:linear-gradient(115deg, rgba(255,255,255,.09) 0%, transparent 30%);
 }#hh .screen{
-  position:relative;aspect-ratio:9/11;border-radius:10px;overflow:hidden;background:#000;
+  position:relative;aspect-ratio:9/12;border-radius:10px;overflow:hidden;background:#000;
   box-shadow:inset 0 0 30px rgba(0,0,0,.55);
 }#hh .world{position:absolute;inset:0;background:var(--sky)}#hh .world[data-w="0"]{--sky:linear-gradient(#ff8f4d,#ffd36b 70%,#ffe9a8);--wall1:#c96f3a;--wall2:#a8542a;--gnd1:#b5542c;--gnd2:#8a3d1e;--hill:#e07b3f}#hh .world[data-w="1"]{--sky:linear-gradient(#4db8f0,#bfe9ff 75%,#e8f9ff);--wall1:#cf8340;--wall2:#a8662c;--gnd1:#c96f2e;--gnd2:#96521f;--hill:#7ccf8f}#hh .world[data-w="2"]{--sky:linear-gradient(#141845,#3b2a7a 70%,#6e3a9e);--wall1:#3c3f6e;--wall2:#2b2d52;--gnd1:#3a3f6e;--gnd2:#262947;--hill:#2c2f5e}#hh .world[data-w="3"]{--sky:linear-gradient(#5fd08f,#d8f7c8 75%,#f2ffee);--wall1:#b98a4e;--wall2:#936a36;--gnd1:#a06a30;--gnd2:#75491d;--hill:#4fae72}#hh .world[data-w="4"]{--sky:linear-gradient(#7a5fc0,#d89fcf 70%,#f7d8ec);--wall1:#8a5f8f;--wall2:#6b486e;--gnd1:#7a4f7e;--gnd2:#583a5c;--hill:#9a6fa0}#hh .world[data-w="2"] .star{opacity:1}#hh .star{position:absolute;width:4px;height:4px;background:#fff;opacity:0;animation:twinkle 2.4s ease-in-out infinite}#hh .cloud{position:absolute;animation:drift linear infinite}#hh .cloud svg{display:block;width:100%;height:auto}@keyframes drift{from{transform:translateX(-30%)}to{transform:translateX(430%)}}#hh .hill{
   position:absolute;bottom:16%;width:46%;height:20%;background:var(--hill);
@@ -544,14 +544,7 @@
   padding:10px;text-shadow:0 1px 0 rgba(255,255,255,.35);
   box-shadow:0 3px 0 rgba(0,0,0,.3), inset 0 2px 2px rgba(255,255,255,.4);
   transition:transform .07s, box-shadow .07s;
-}#hh .viewall:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}#hh .viewall:focus-visible{outline:2px solid #b03a28;outline-offset:2px}#hh .deck-tip{font-family:var(--px);font-size:7px;color:#a5824f;letter-spacing:1px;text-align:center;line-height:1.8}#hh .shell-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:0 6px}#hh .power-pill{
-  display:flex;align-items:center;gap:8px;cursor:pointer;
-  background:linear-gradient(#5a4636,#33271c);color:#f5e6c8;border:none;border-radius:14px;
-  padding:8px 12px;font-family:var(--px);font-size:8px;letter-spacing:1px;
-  box-shadow:0 4px 0 #1d140c, inset 0 1px 2px rgba(255,255,255,.25);
-  transition:transform .07s, box-shadow .07s;
-}#hh .power-pill:active{transform:translateY(3px);box-shadow:0 1px 0 #1d140c}#hh .power-pill:focus-visible{outline:2px solid #fff;outline-offset:2px}#hh .led{width:9px;height:9px;border-radius:50%;flex:none;background:#ff5252;box-shadow:0 0 8px rgba(255,82,82,.95);transition:background .3s, box-shadow .3s}#hh:not(.off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.95)}#hh .speaker-dots{display:grid;grid-template-columns:repeat(6,10px);gap:7px;transform:rotate(-18deg)}#hh .speaker-dots i{width:9px;height:9px;border-radius:50%;background:#8f1f14;
-  box-shadow:inset 0 2px 3px rgba(0,0,0,.55), 0 1px 0 rgba(255,255,255,.25)}#hh .toast{
+}#hh .viewall:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}#hh .viewall:focus-visible{outline:2px solid #b03a28;outline-offset:2px}#hh .deck-tip{font-family:var(--px);font-size:7px;color:#a5824f;letter-spacing:1px;text-align:center;line-height:1.8}#hh .toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
   background:#141021;border:1px solid rgba(255,176,58,.5);color:#ffd9a0;
   padding:12px 20px;border-radius:30px;font-size:.9rem;z-index:99;opacity:0;
@@ -568,9 +561,9 @@
   background:rgba(0,0,0,.55);border:2px solid var(--chip,#ffe066);
   padding:8px 12px;border-radius:20px;
 }#hh .world[data-w="0"]{--chip:#ff9d5c}#hh .world[data-w="1"]{--chip:#4db8f0}#hh .world[data-w="2"]{--chip:#b98aff}#hh .world[data-w="3"]{--chip:#5fd08f}#hh .world[data-w="4"]{--chip:#e08ac0}
-#hh .stage{width:100%;max-width:350px;margin:0 auto}
+#hh .stage{width:100%;max-width:380px;margin:0 auto}
 #hh .chname{font-size:9px}
-@media (min-width:1025px){#hh .stage{max-width:min(350px,calc((100vh - 240px)*0.57))}}
+@media (min-width:1025px){#hh .stage{max-width:min(380px,calc((100vh - 240px)*0.57))}}
 
 </style>
 </head>
@@ -689,11 +682,6 @@
       <div class="deck">
         <div class="chnames" id="chRow" role="group" aria-label="Worlds"></div>
         <button class="viewall" id="btnStart">VIEW ALL</button>
-      </div>
-
-      <div class="shell-foot">
-        <button class="power-pill" id="powerBtn"><span class="led"></span>POWER</button>
-        <div class="speaker-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
     </div>
   </div>
@@ -1511,7 +1499,6 @@ function buildWorldButtons(){
 buildWorldButtons();
 press(char,()=>jump()); /* tap the runner */
 press($('btnStart'),startGallery);
-press($('powerBtn'),()=>setPower(!state.power));
 press(block,hitBlock);
 press(frameWrap,()=>stepItem(1)); /* tap the screen = next piece */
 block.addEventListener('keydown',(e)=>{
