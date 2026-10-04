@@ -103,7 +103,7 @@ body{
 
 /* ---------- the game screen ---------- */
 .screen{
-  position:relative;aspect-ratio:9/13;border-radius:10px;overflow:hidden;background:#000;
+  position:relative;aspect-ratio:9/11;border-radius:10px;overflow:hidden;background:#000;
   box-shadow:inset 0 0 30px rgba(0,0,0,.55);
 }
 .world{position:absolute;inset:0;background:var(--sky)}
@@ -246,18 +246,6 @@ body{
 }
 .wipe.on{animation:wipea .5s steps(6)}
 @keyframes wipea{0%{opacity:0;transform:translateX(-102%)}30%{opacity:1}60%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(102%)}}
-.splash{
-  position:absolute;inset:0;z-index:21;display:flex;flex-direction:column;gap:12px;
-  align-items:center;justify-content:center;background:rgba(10,8,20,.72);
-  opacity:0;pointer-events:none;transition:opacity .15s;
-}
-.splash.on{opacity:1}
-.splash .w{
-  font-family:var(--px);font-size:20px;color:#ffe066;letter-spacing:2px;
-  text-shadow:3px 3px 0 #b03a28, 6px 6px 0 rgba(0,0,0,.4);
-}
-.splash .c{font-family:var(--px);font-size:11px;color:#fff;letter-spacing:3px}
-
 /* press start + boot */
 .press-start{
   position:absolute;left:0;right:0;bottom:12%;z-index:22;text-align:center;
@@ -299,7 +287,7 @@ body{
 .chname{
   padding:8px 2px;border:2px solid rgba(0,0,0,.25);border-radius:9px;cursor:pointer;
   touch-action:manipulation;background:var(--c);color:var(--fg,#fff);
-  font-family:var(--px);font-size:7px;font-weight:bold;letter-spacing:.5px;line-height:1.4;
+  font-family:var(--px);font-size:9px;font-weight:bold;letter-spacing:.5px;line-height:1.4;
   text-shadow:0 2px 0 rgba(0,0,0,.28);
   box-shadow:0 3px 0 rgba(0,0,0,.3), inset 0 2px 2px rgba(255,255,255,.4);
   transition:transform .07s, box-shadow .07s;
@@ -430,7 +418,6 @@ body:not(.off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.95)}
           </div>
 
           <div class="wipe" id="wipe"></div>
-          <div class="splash" id="splash"><div class="w" id="splashW">WORLD 1-1</div><div class="c" id="splashC">REELS!</div></div>
           <div class="press-start" id="pressStart">PRESS START</div>
           <div class="boot" id="boot"><div class="bstar"></div><div class="btxt">READY!</div></div>
           <div class="screen-fx"></div>
@@ -571,7 +558,7 @@ const $ = (id)=>document.getElementById(id);
 const world=$('world'), frameWrap=$('frameWrap'),
   wVideo=$('wVideo'), wImage=$('wImage'), aboutCard=$('aboutCard'),
   frameCap=$('frameCap'), fx=$('fxLayer'), char=$('char'), block=$('block'),
-  wipe=$('wipe'), splash=$('splash'), splashW=$('splashW'), splashC=$('splashC'),
+  wipe=$('wipe'),
   pressStart=$('pressStart'), boot=$('boot'), toastEl=$('toast'), screenEl=$('screen');
 
 const state = { w:0, i:0, playing:true, score:0, power:false, interacted:false, blockHits:0, bonus:false };
@@ -670,17 +657,13 @@ async function setWorld(n,opts={}){
   interact();
   const W=WORLDS[n];
   wipe.classList.remove('on'); void wipe.offsetWidth; wipe.classList.add('on');
-  splashW.textContent='WORLD 1-'+(n+1);
-  splashC.textContent=W.label+'!';
-  splash.classList.add('on');
   await wait(RM?60:420);
   if(my!==token) return;
   world.dataset.w=n; state.w=n;
   markWorldButtons();
   await showItem(0,1,{silent:true});
-  await wait(RM?60:480);
+  await wait(RM?60:200);
   if(my!==token) return;
-  splash.classList.remove('on');
   hud();
 }
 
