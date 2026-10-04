@@ -390,7 +390,7 @@
   </style>
   <style>
   /* ===== handheld hero console (from tv-demo) ===== */
-#hh{
+#hh :root{
   --px:'Press Start 2P', monospace;
   --shell-hi:#f05645;
   --shell:#d9382a;
@@ -400,6 +400,11 @@
   --cream-lo:#d9c491;
 }
 #hh *{box-sizing:border-box;margin:0;padding:0}
+#hh html{-webkit-text-size-adjust:100%}
+#hh{
+  font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+  background:#f6e7c9;color:#4a3220;min-height:100vh;overflow-x:hidden;
+}
 @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.8;transform:scale(1.1)}}
 #hh .stage{position:relative;z-index:4;width:min(400px,94vw)}
 #hh .console{
@@ -590,7 +595,9 @@
              0 2px 6px rgba(0,0,0,.25);
   display:flex;flex-direction:column;gap:9px;
 }
-#hh .chnames{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+#hh .chnames{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+#hh .chname:nth-child(1), #hh .chname:nth-child(2){grid-column:span 3}
+#hh .chname:nth-child(3), #hh .chname:nth-child(4), #hh .chname:nth-child(5){grid-column:span 2}
 #hh .chname{
   padding:11px 2px;border:2px solid rgba(0,0,0,.25);border-radius:10px;cursor:pointer;
   touch-action:manipulation;background:var(--c);color:var(--fg,#fff);
@@ -602,27 +609,16 @@
 #hh .chname:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
 #hh .chname.active{outline:3px solid rgba(255,255,255,.65);box-shadow:0 3px 0 rgba(0,0,0,.3),0 0 16px var(--c)}
 #hh .chname:focus-visible{outline:3px solid #b03a28;outline-offset:2px}
-#hh .transport{display:flex;align-items:center;gap:9px}
-#hh .tbtn{
-  width:42px;height:42px;border-radius:50%;border:2px solid rgba(0,0,0,.3);cursor:pointer;
-  touch-action:manipulation;background:radial-gradient(circle at 35% 30%, #4a4a55, #23232b);
-  color:#f5e6c8;font-size:14px;
-  box-shadow:0 3px 0 rgba(0,0,0,.35), inset 0 1px 2px rgba(255,255,255,.25);
-  transition:transform .07s, box-shadow .07s;
-  display:flex;align-items:center;justify-content:center;
-}
-#hh .tbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
-#hh .tbtn:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
-#hh .start-pill{
-  margin-left:auto;border:none;border-radius:13px;cursor:pointer;touch-action:manipulation;
-  background:linear-gradient(#ffb03a,#e08a12);color:#3a2200;
-  font-family:var(--px);font-size:9px;font-weight:bold;letter-spacing:1px;
-  padding:12px 18px;
-  box-shadow:0 3px 0 rgba(0,0,0,.3), inset 0 1px 2px rgba(255,255,255,.4);
+#hh .viewall{
+  border:2px solid rgba(0,0,0,.25);border-radius:12px;cursor:pointer;touch-action:manipulation;
+  background:linear-gradient(#ffb03a,#e08a12);color:#3a2200;width:100%;
+  font-family:var(--px);font-size:10px;font-weight:bold;letter-spacing:1px;
+  padding:13px 10px;text-shadow:0 1px 0 rgba(255,255,255,.35);
+  box-shadow:0 3px 0 rgba(0,0,0,.3), inset 0 2px 2px rgba(255,255,255,.4);
   transition:transform .07s, box-shadow .07s;
 }
-#hh .start-pill:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
-#hh .start-pill:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
+#hh .viewall:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+#hh .viewall:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
 #hh .deck-tip{font-family:var(--px);font-size:7px;color:#a5824f;letter-spacing:1px;text-align:center;line-height:1.8}
 #hh .shell-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:0 8px}
 #hh .power-pill{
@@ -684,7 +680,7 @@
 #hh .world[data-w="2"]{--chip:#b98aff}
 #hh .world[data-w="3"]{--chip:#5fd08f}
 #hh .world[data-w="4"]{--chip:#e08ac0}
-#hh .stage{width:100%;max-width:340px;margin:0 auto}
+#hh .stage{width:100%;max-width:290px;margin:0 auto}
 
   </style>
 </head>
@@ -725,6 +721,7 @@
           </div>
         </div>
         <div>
+                  <div>
           <div id="hh" class="off">
 <div class="stage">
 <div class="console" id="console">
@@ -798,13 +795,7 @@
 
       <div class="deck">
         <div class="chnames" id="chRow" role="group" aria-label="Worlds"></div>
-        <div class="transport">
-          <button class="tbtn" id="btnPrev" aria-label="Previous item">&#9198;</button>
-          <button class="tbtn" id="btnPlay" aria-label="Play or pause">&#10074;&#10074;</button>
-          <button class="tbtn" id="btnNext" aria-label="Next item">&#9197;</button>
-          <button class="start-pill" id="btnStart">START</button>
-        </div>
-        <div class="deck-tip">5 WORLDS UP TOP &middot; TAP THE ? BLOCK FOR A BONUS</div>
+        <button class="viewall" id="btnStart">VIEW ALL</button>
       </div>
 
       <div class="shell-foot">
@@ -815,6 +806,7 @@
   </div>
             <div class="toast" id="toast" role="status"></div>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -1526,14 +1518,10 @@ function hitBlock(){
 }
 
 /* ---------- transport ---------- */
-function updatePlayBtn(){
-  $('btnPlay').innerHTML = state.playing ? '&#10074;&#10074;' : '&#9654;';
-}
 function togglePlay(){
   if(!state.power) return;
   interact();
   state.playing=!state.playing;
-  updatePlayBtn();
   const it=state.bonus?null:cur();
   if(it && it.type==='video'){
     if(state.playing) wVideo.play().catch(()=>{}); else wVideo.pause();
@@ -1586,12 +1574,10 @@ WORLDS.forEach((W,i)=>{
   $('chRow').appendChild(b);
 });
 press(char,()=>jump()); /* tap the runner */
-press($('btnPlay'),togglePlay);
-press($('btnPrev'),()=>stepItem(-1));
-press($('btnNext'),()=>stepItem(1));
 press($('btnStart'),startGallery);
 press($('powerBtn'),()=>setPower(!state.power));
 press(block,hitBlock);
+press(frameWrap,()=>stepItem(1)); /* tap the screen = next piece */
 block.addEventListener('keydown',(e)=>{
   if(e.key==='Enter'||e.key===' '){e.preventDefault();hitBlock();}
 });

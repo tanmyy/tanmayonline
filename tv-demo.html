@@ -291,8 +291,10 @@ body{
   display:flex;flex-direction:column;gap:9px;
 }
 
-/* five bold category buttons, one per world */
-.chnames{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+/* five bold category buttons: two long up top, three shorter below */
+.chnames{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.chname:nth-child(1),.chname:nth-child(2){grid-column:span 3}
+.chname:nth-child(3),.chname:nth-child(4),.chname:nth-child(5){grid-column:span 2}
 .chname{
   padding:11px 2px;border:2px solid rgba(0,0,0,.25);border-radius:10px;cursor:pointer;
   touch-action:manipulation;background:var(--c);color:var(--fg,#fff);
@@ -305,28 +307,17 @@ body{
 .chname.active{outline:3px solid rgba(255,255,255,.65);box-shadow:0 3px 0 rgba(0,0,0,.3),0 0 16px var(--c)}
 .chname:focus-visible{outline:3px solid #b03a28;outline-offset:2px}
 
-/* slim transport row */
-.transport{display:flex;align-items:center;gap:9px}
-.tbtn{
-  width:42px;height:42px;border-radius:50%;border:2px solid rgba(0,0,0,.3);cursor:pointer;
-  touch-action:manipulation;background:radial-gradient(circle at 35% 30%, #4a4a55, #23232b);
-  color:#f5e6c8;font-size:14px;
-  box-shadow:0 3px 0 rgba(0,0,0,.35), inset 0 1px 2px rgba(255,255,255,.25);
-  transition:transform .07s, box-shadow .07s;
-  display:flex;align-items:center;justify-content:center;
-}
-.tbtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
-.tbtn:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
-.start-pill{
-  margin-left:auto;border:none;border-radius:13px;cursor:pointer;touch-action:manipulation;
-  background:linear-gradient(#ffb03a,#e08a12);color:#3a2200;
-  font-family:var(--px);font-size:9px;font-weight:bold;letter-spacing:1px;
-  padding:12px 18px;
-  box-shadow:0 3px 0 rgba(0,0,0,.3), inset 0 1px 2px rgba(255,255,255,.4);
+/* view-all gallery button */
+.viewall{
+  border:2px solid rgba(0,0,0,.25);border-radius:12px;cursor:pointer;touch-action:manipulation;
+  background:linear-gradient(#ffb03a,#e08a12);color:#3a2200;width:100%;
+  font-family:var(--px);font-size:10px;font-weight:bold;letter-spacing:1px;
+  padding:13px 10px;text-shadow:0 1px 0 rgba(255,255,255,.35);
+  box-shadow:0 3px 0 rgba(0,0,0,.3), inset 0 2px 2px rgba(255,255,255,.4);
   transition:transform .07s, box-shadow .07s;
 }
-.start-pill:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
-.start-pill:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
+.viewall:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+.viewall:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
 .deck-tip{font-family:var(--px);font-size:7px;color:#a5824f;letter-spacing:1px;text-align:center;line-height:1.8}
 
 /* speaker + power on shell */
@@ -447,13 +438,7 @@ body:not(.off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.95)}
 
       <div class="deck">
         <div class="chnames" id="chRow" role="group" aria-label="Worlds"></div>
-        <div class="transport">
-          <button class="tbtn" id="btnPrev" aria-label="Previous item">&#9198;</button>
-          <button class="tbtn" id="btnPlay" aria-label="Play or pause">&#10074;&#10074;</button>
-          <button class="tbtn" id="btnNext" aria-label="Next item">&#9197;</button>
-          <button class="start-pill" id="btnStart">START</button>
-        </div>
-        <div class="deck-tip">5 WORLDS UP TOP &middot; TAP THE ? BLOCK FOR A BONUS</div>
+        <button class="viewall" id="btnStart">VIEW ALL</button>
       </div>
 
       <div class="shell-foot">
@@ -705,14 +690,10 @@ function hitBlock(){
 }
 
 /* ---------- transport ---------- */
-function updatePlayBtn(){
-  $('btnPlay').innerHTML = state.playing ? '&#10074;&#10074;' : '&#9654;';
-}
 function togglePlay(){
   if(!state.power) return;
   interact();
   state.playing=!state.playing;
-  updatePlayBtn();
   const it=state.bonus?null:cur();
   if(it && it.type==='video'){
     if(state.playing) wVideo.play().catch(()=>{}); else wVideo.pause();
@@ -765,12 +746,10 @@ WORLDS.forEach((W,i)=>{
   $('chRow').appendChild(b);
 });
 press(char,()=>jump()); /* tap the runner */
-press($('btnPlay'),togglePlay);
-press($('btnPrev'),()=>stepItem(-1));
-press($('btnNext'),()=>stepItem(1));
 press($('btnStart'),startGallery);
 press($('powerBtn'),()=>setPower(!state.power));
 press(block,hitBlock);
+press(frameWrap,()=>stepItem(1)); /* tap the screen = next piece */
 block.addEventListener('keydown',(e)=>{
   if(e.key==='Enter'||e.key===' '){e.preventDefault();hitBlock();}
 });
