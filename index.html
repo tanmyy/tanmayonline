@@ -390,7 +390,7 @@
   </style>
   <style>
   /* ===== handheld hero console (from tv-demo) ===== */
-#hh :root{
+#hh{
   --px:'Press Start 2P', monospace;
   --shell-hi:#f05645;
   --shell:#d9382a;
@@ -400,11 +400,6 @@
   --cream-lo:#d9c491;
 }
 #hh *{box-sizing:border-box;margin:0;padding:0}
-#hh html{-webkit-text-size-adjust:100%}
-#hh{
-  font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
-  background:#f6e7c9;color:#4a3220;min-height:100vh;overflow-x:hidden;
-}
 @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.8;transform:scale(1.1)}}
 #hh .stage{position:relative;z-index:4;width:min(400px,94vw)}
 #hh .console{
@@ -680,9 +675,9 @@
 #hh .world[data-w="2"]{--chip:#b98aff}
 #hh .world[data-w="3"]{--chip:#5fd08f}
 #hh .world[data-w="4"]{--chip:#e08ac0}
-#hh .stage{width:100%;max-width:300px;margin:0 auto}
-@media (max-height:820px){#hh .stage{max-width:250px}}
-@media (min-height:821px){#hh .chname{font-size:8px}}
+#hh .stage{width:100%;max-width:260px;margin:0 auto}
+#hh .chname{font-size:8px}
+@media (max-height:780px){#hh .stage{max-width:235px}#hh .chname{font-size:7px}}
 
   </style>
 </head>
@@ -723,6 +718,7 @@
           </div>
         </div>
         <div>
+                  <div>
                   <div>
                   <div>
                   <div>
@@ -810,6 +806,7 @@
   </div>
             <div class="toast" id="toast" role="status"></div>
           </div>
+        </div>
         </div>
         </div>
         </div>
