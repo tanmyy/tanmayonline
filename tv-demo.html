@@ -800,6 +800,9 @@ markWorldButtons();
 setTimeout(()=>{
   const siteW=worldsFromSite();
   if(siteW){ WORLDS=siteW; state.w=0; state.i=0; buildWorldButtons(); }
+  /* default world: posters */
+  const pw=WORLDS.findIndex(w=>w.key==='posters');
+  state.w=pw>=0?pw:0; state.i=0; markWorldButtons();
   boot.classList.add('gone');
   setPower(true);
   showItem(0,1,{silent:true});
