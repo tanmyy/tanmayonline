@@ -1494,7 +1494,7 @@ function buildWorldButtons(){
   markWorldButtons();
 }
 buildWorldButtons();
-press(char,()=>jump()); /* tap the runner */
+press(char,()=>stepItem(1)); /* tap the runner = next slide */
 press($('btnStart'),startGallery);
 press(block,hitBlock);
 press(frameWrap,()=>stepItem(1)); /* tap the screen = next piece */
