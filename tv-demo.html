@@ -296,17 +296,7 @@ body{
 .chname.active{outline:3px solid rgba(255,255,255,.65);box-shadow:0 3px 0 rgba(0,0,0,.3),0 0 16px var(--c)}
 .chname:focus-visible{outline:3px solid #b03a28;outline-offset:2px}
 
-/* view-all gallery button */
-.viewall{
-  border:2px solid rgba(0,0,0,.25);border-radius:12px;cursor:pointer;touch-action:manipulation;
-  background:linear-gradient(#ffb03a,#e08a12);color:#3a2200;width:100%;
-  font-family:var(--px);font-size:9px;font-weight:bold;letter-spacing:1px;
-  padding:10px;text-shadow:0 1px 0 rgba(255,255,255,.35);
-  box-shadow:0 3px 0 rgba(0,0,0,.3), inset 0 2px 2px rgba(255,255,255,.4);
-  transition:transform .07s, box-shadow .07s;
-}
-.viewall:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
-.viewall:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
+/* view-all now lives on the screen chip; deck button removed */
 .deck-tip{font-family:var(--px);font-size:7px;color:#a5824f;letter-spacing:1px;text-align:center;line-height:1.8}
 
 /* speaker + power on shell */
@@ -367,7 +357,8 @@ body{
             </div>
             <div class="scrim-top"></div>
             <div class="scrim-bottom"></div>
-            <div class="cap-chip" id="frameCap">REELS 1/3</div>
+            <button class="cap-chip" id="btnStart">VIEW ALL</button>
+            <div class="count-chip" id="frameCount">1/12</div>
 
             <div class="char running" id="char">
               <svg viewBox="0 0 16 16" shape-rendering="crispEdges">
@@ -411,7 +402,6 @@ body{
 
       <div class="deck">
         <div class="chnames" id="chRow" role="group" aria-label="Worlds"></div>
-        <button class="viewall" id="btnStart">VIEW ALL</button>
       </div>
     </div>
   </main>
@@ -521,7 +511,13 @@ body.off .world{opacity:0}
   position:absolute;bottom:4%;left:50%;transform:translateX(-50%);z-index:12;
   font-family:var(--px);font-size:8px;letter-spacing:1px;color:#fff;white-space:nowrap;
   background:rgba(0,0,0,.55);border:2px solid var(--chip,#ffe066);
-  padding:8px 12px;border-radius:20px;
+  padding:8px 12px;border-radius:20px;cursor:pointer;touch-action:manipulation;
+}
+.cap-chip:active{transform:translateX(-50%) scale(.96)}
+.count-chip{
+  position:absolute;top:3%;right:4%;z-index:12;
+  font-family:var(--px);font-size:8px;letter-spacing:1px;color:#fff;white-space:nowrap;
+  background:rgba(0,0,0,.55);padding:6px 10px;border-radius:12px;pointer-events:none;
 }
 .world[data-w="0"]{--chip:#ff9d5c}
 .world[data-w="1"]{--chip:#4db8f0}
@@ -537,7 +533,7 @@ const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = (id)=>document.getElementById(id);
 const world=$('world'), frameWrap=$('frameWrap'),
   wVideo=$('wVideo'), wImage=$('wImage'), aboutCard=$('aboutCard'),
-  frameCap=$('frameCap'), fx=$('fxLayer'), char=$('char'), block=$('block'),
+  frameCount=$('frameCount'), fx=$('fxLayer'), char=$('char'), block=$('block'),
   wipe=$('wipe'),
   pressStart=$('pressStart'), boot=$('boot'), toastEl=$('toast'), screenEl=$('screen');
 
@@ -618,7 +614,7 @@ async function showItem(j,dir=1,opts={}){
   void frameWrap.offsetWidth;
   frameWrap.classList.add(dir>=0?'slide-r':'slide-l');
   showMedia(item, ()=>stepItem(1));
-  frameCap.textContent = opts.bonus ? ('BONUS! '+item.cap) : (W.label+' '+(state.i+1)+'/'+n);
+  frameCount.textContent = (state.i+1)+'/'+n;
   hud();
   if(!opts.silent && state.power) addScore(100,50,30);
   const nx=W.items[(state.i+1)%n];
