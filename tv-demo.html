@@ -96,7 +96,7 @@ body.tv-off .ambient{opacity:.05}
 
 /* ---------- the TV ---------- */
 .tv-scene{position:relative;z-index:4;width:min(560px,94vw)}
-.tv{position:relative;--glow:#4d9fff}
+.tv{position:relative}
 
 /* antenna */
 .antenna{position:absolute;top:-104px;left:50%;width:0;height:0;z-index:0}
@@ -424,7 +424,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
           </div>
           <div class="power-block">
             <button class="power" id="powerBtn" aria-label="Power on or off">
-              <span class="led"></span>&#9199;
+              <span class="led"></span>&#9167;
             </button>
             <span class="power-label">POWER</span>
           </div>
@@ -591,7 +591,7 @@ function showItem(j){
     tvImage.classList.remove('show');
     let done = false;
     const finish = ()=>{ if(!done){ done = true; resolve(); } };
-    const to = setTimeout(finish, 4000);
+    const to = setTimeout(finish, 8000);
     const ok = ()=>{ clearTimeout(to); finish(); };
     if(item.type === 'video'){
       tvVideo.oncanplay = ()=>{ tvVideo.oncanplay = null; if(state.playing && powerOn) tvVideo.play().catch(()=>{}); ok(); };
@@ -620,7 +620,7 @@ function markButtons(){
 async function tune(i, opts={}){
   if(!powerOn) return;
   const my = ++tuneToken;
-  if(!opts.auto){ dismissHint(); stopAttract(); }
+  if(!opts.auto && !opts.initial){ dismissHint(); stopAttract(); }
   const ch = CHANNELS[i];
   state.ch = i; state.playing = true; updatePlayBtn();
   document.documentElement.style.setProperty('--glow', ch.tint);
@@ -686,7 +686,13 @@ async function setPower(on){
     osd('TANMAYTRON', 1200);
     await wait(RM ? 60 : 700);
     screen.classList.remove('warming');
-    tune(state.ch, { quick:true });
+    tune(state.ch, { quick:true, initial:true });
+    // warm the image cache after power-on so later channel hops feel instant
+    setTimeout(()=>{
+      CHANNELS.forEach(ch=>ch.items.forEach(it=>{
+        if(it.type === 'image'){ const p = new Image(); p.src = it.src; }
+      }));
+    }, 2500);
   } else {
     dismissHint(); stopAttract(); clearImgTimer();
     tvVideo.pause(); staticStop();
