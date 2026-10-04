@@ -23,7 +23,6 @@
   --cream-hi:#f8eed4;
   --cream:#eedcae;
   --cream-lo:#d9c491;
-  --ink:#5a3a20;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -90,7 +89,7 @@ body.tv-off .ambient{opacity:.05}
 .demo-note code{color:#ffd9a0;font-size:.78rem}
 
 /* ---------- the handheld ---------- */
-.tv-scene{position:relative;z-index:4;width:min(560px,94vw)}
+.tv-scene{position:relative;z-index:4;width:min(600px,94vw)}
 .tv{position:relative}
 .boy{
   position:relative;border-radius:30px;padding:26px 22px 20px;
@@ -110,7 +109,7 @@ body.tv-off .boy{box-shadow:
     0 0 40px -30px var(--glow);
 }
 
-/* screen */
+/* long wide screen */
 .boy-screen-bezel{
   border-radius:16px;padding:16px;
   background:linear-gradient(170deg,#2a2a31,#141418);
@@ -124,7 +123,7 @@ body.tv-off .boy{box-shadow:
 }
 body.tv-off .boy-screen-bezel::after{opacity:.06}
 .screen{
-  position:relative;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:#000;
+  position:relative;aspect-ratio:21/9;border-radius:8px;overflow:hidden;background:#000;
   box-shadow:inset 0 0 40px rgba(0,0,0,.9);
 }
 .tube{position:absolute;inset:0}
@@ -179,90 +178,63 @@ body.tv-off .boy-screen-bezel::after{opacity:.06}
 
 /* ---------- cream control deck ---------- */
 .deck{
-  margin-top:20px;border-radius:18px;padding:20px 18px;
+  margin-top:20px;border-radius:18px;padding:18px;
   background:linear-gradient(175deg, var(--cream-hi), var(--cream) 60%, var(--cream-lo));
   border:1px solid #b89a5e;
   box-shadow:inset 0 2px 5px rgba(255,255,255,.6), inset 0 -4px 8px rgba(120,85,30,.25),
              0 2px 6px rgba(0,0,0,.25);
-  display:flex;align-items:center;gap:16px;
+  display:flex;flex-direction:column;gap:14px;
 }
-/* D-pad: up/down = channel, left/right = prev/next item */
-.dpad{position:relative;width:124px;height:124px;flex:none}
-.dpad .bar{
-  position:absolute;background:linear-gradient(#41414d,#26262e);border-radius:9px;
-  box-shadow:0 5px 0 #101016, inset 0 2px 3px rgba(255,255,255,.18);
+/* five named channel buttons */
+.chnames{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.chname{
+  padding:13px 2px;border:2px solid rgba(0,0,0,.25);border-radius:12px;cursor:pointer;
+  background:var(--c);color:var(--fg,#fff);
+  font-family:var(--px);font-size:8px;letter-spacing:1px;line-height:1.5;
+  text-shadow:0 1px 2px rgba(0,0,0,.35);
+  box-shadow:0 4px 0 rgba(0,0,0,.3), inset 0 2px 3px rgba(255,255,255,.4);
+  transition:transform .07s, box-shadow .07s;
 }
-.dpad .bar.v{left:42px;top:0;width:40px;height:124px}
-.dpad .bar.h{top:42px;left:0;width:124px;height:40px}
-.dpad .dp{
-  position:absolute;width:40px;height:40px;z-index:2;background:transparent;border:none;
-  color:#cfcfda;font-size:13px;cursor:pointer;padding:0;
-}
-.dpad .dp:active{color:var(--amber)}
-.dp.up{left:42px;top:0}
-.dp.down{left:42px;bottom:0}
-.dp.left{left:0;top:42px}
-.dp.right{right:0;top:42px}
-.dp-center{
-  position:absolute;left:42px;top:42px;width:40px;height:40px;border-radius:50%;z-index:1;
-  background:radial-gradient(circle at 35% 30%, #54545f, #232329);
-  box-shadow:inset 0 2px 5px rgba(0,0,0,.6);
-}
-.dp:focus-visible{outline:2px solid #b03a28;outline-offset:2px;border-radius:6px}
+.chname:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+.chname.active{outline:3px solid rgba(255,255,255,.6);box-shadow:0 4px 0 rgba(0,0,0,.3), 0 0 18px var(--c)}
+.chname:focus-visible{outline:3px solid #b03a28;outline-offset:2px}
 
-/* middle: pixel channel title + SELECT/START pills */
-.deck-mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
-.deck-title{
-  font-family:var(--px);font-size:clamp(13px,3.6vw,19px);letter-spacing:2px;
-  color:#b03a28;text-shadow:2px 2px 0 rgba(176,58,40,.16);
-  white-space:nowrap;
+/* transport row */
+.transport{display:flex;align-items:center;gap:10px}
+.tbtn{
+  width:46px;height:46px;border-radius:50%;border:2px solid rgba(0,0,0,.3);cursor:pointer;
+  background:radial-gradient(circle at 35% 30%, #4a4a55, #23232b);color:#f5e6c8;font-size:15px;
+  box-shadow:0 4px 0 rgba(0,0,0,.35), inset 0 1px 2px rgba(255,255,255,.25);
+  transition:transform .07s, box-shadow .07s;
 }
-.deck-sub{
-  font-family:var(--px);font-size:8px;letter-spacing:2px;color:#a5824f;
+.tbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+.tbtn:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
+.viewall{
+  background:linear-gradient(#ffb03a,#e08a12);color:#3a2200;border:2px solid rgba(0,0,0,.25);
+  border-radius:14px;padding:14px 16px;font-family:var(--px);font-size:9px;letter-spacing:1px;cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.3), inset 0 1px 2px rgba(255,255,255,.4);
+  transition:transform .07s, box-shadow .07s;
 }
-.pills{display:flex;gap:16px}
-.pill-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
-.pill{
-  width:76px;padding:10px 0;border:none;border-radius:14px;cursor:pointer;
-  background:linear-gradient(#5a4636,#33271c);color:#f5e6c8;
-  font-family:var(--px);font-size:8px;letter-spacing:1px;
+.viewall:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+.viewall:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
+.power-pill{
+  margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer;
+  background:linear-gradient(#5a4636,#33271c);color:#f5e6c8;border:none;border-radius:16px;
+  padding:14px 18px;font-family:var(--px);font-size:9px;letter-spacing:1px;
   box-shadow:0 4px 0 #1d140c, inset 0 1px 2px rgba(255,255,255,.25);
   transition:transform .07s, box-shadow .07s;
 }
-.pill:active{transform:translateY(3px);box-shadow:0 1px 0 #1d140c}
-.pill:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
-.pill-label{font-size:.58rem;letter-spacing:2px;color:#8a6f4d}
-
-/* round channel buttons */
-.abtns{display:flex;gap:10px;flex:none}
-.abtn{
-  width:44px;height:44px;border-radius:50%;cursor:pointer;
-  border:2px solid rgba(0,0,0,.22);background:var(--c);color:#fff;
-  font-family:var(--px);font-size:10px;
-  box-shadow:0 4px 0 rgba(0,0,0,.28), inset 0 2px 3px rgba(255,255,255,.45);
-  transition:transform .07s, box-shadow .07s;
-}
-.abtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
-.abtn.active{box-shadow:0 4px 0 rgba(0,0,0,.28), 0 0 18px var(--c);outline:3px solid rgba(255,255,255,.55)}
-.abtn:focus-visible{outline:3px solid #b03a28;outline-offset:2px}
-
-/* power + speaker on the red shell */
-.boy-foot{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:0 10px}
-.mini-power{
-  width:44px;height:44px;border-radius:50%;cursor:pointer;position:relative;
-  background:radial-gradient(circle at 35% 30%, #ff8a7a, var(--shell) 72%);
-  border:2px solid #8f1f14;color:#fff;font-size:15px;
-  box-shadow:0 3px 0 #7c1a10, inset 0 1px 2px rgba(255,255,255,.45);
-  transition:transform .07s, box-shadow .07s;
-}
-.mini-power:active{transform:translateY(2px);box-shadow:0 1px 0 #7c1a10}
-.mini-power:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.power-pill:active{transform:translateY(3px);box-shadow:0 1px 0 #1d140c}
+.power-pill:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
 .led{
-  position:absolute;top:4px;right:6px;width:8px;height:8px;border-radius:50%;
+  width:9px;height:9px;border-radius:50%;flex:none;
   background:#ff5252;box-shadow:0 0 8px rgba(255,82,82,.95);
   transition:background .3s, box-shadow .3s;
 }
 body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.95)}
+
+/* speaker dots on the red shell */
+.boy-foot{display:flex;justify-content:center;margin-top:14px}
 .speaker-dots{display:grid;grid-template-columns:repeat(6,10px);gap:7px;transform:rotate(-18deg)}
 .speaker-dots i{
   width:9px;height:9px;border-radius:50%;background:#8f1f14;
@@ -289,7 +261,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
   filter:drop-shadow(0 0 4px rgba(255,176,58,.8))}
 
 /* ---------- mobile fallback tiles ---------- */
-.m-tiles{display:none;position:relative;z-index:6;width:min(560px,94vw)}
+.m-tiles{display:none;position:relative;z-index:6;width:min(600px,94vw)}
 .m-tiles h2{
   font-family:var(--px);font-size:12px;color:var(--amber);letter-spacing:2px;
   margin-bottom:16px;text-align:center;
@@ -322,10 +294,6 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
 @media (prefers-reduced-motion: reduce){
   .fx-flicker,.fx-sheen,.hint,.mote{animation:none !important}
   .hint{display:none}
-}
-@media (max-width:520px){
-  .deck{flex-wrap:wrap;justify-content:center}
-  .abtns{order:3;width:100%;justify-content:center;margin-top:4px}
 }
 </style>
 </head>
@@ -365,36 +333,17 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
         </div>
 
         <div class="deck">
-          <div class="dpad" role="group" aria-label="D-pad: up and down change channel, left and right change item">
-            <span class="bar v"></span><span class="bar h"></span><span class="dp-center"></span>
-            <button class="dp up" data-k="up" aria-label="Previous channel">&#9650;</button>
-            <button class="dp down" data-k="down" aria-label="Next channel">&#9660;</button>
-            <button class="dp left" data-k="left" aria-label="Previous item">&#9664;</button>
-            <button class="dp right" data-k="right" aria-label="Next item">&#9654;</button>
+          <div class="chnames" id="chRow" role="group" aria-label="Channels"></div>
+          <div class="transport">
+            <button class="tbtn" id="btnPrev" aria-label="Previous item">&#9198;</button>
+            <button class="tbtn" id="btnPlay" aria-label="Play or pause">&#10074;&#10074;</button>
+            <button class="tbtn" id="btnNext" aria-label="Next item">&#9197;</button>
+            <button class="viewall" id="btnAll">VIEW ALL</button>
+            <button class="power-pill" id="powerBtn"><span class="led"></span>POWER</button>
           </div>
-
-          <div class="deck-mid">
-            <div class="deck-title" id="deckTitle">REELS</div>
-            <div class="deck-sub" id="deckSub">CH 01 / 05</div>
-            <div class="pills">
-              <div class="pill-wrap">
-                <button class="pill" id="btnPlay">SELECT</button>
-                <span class="pill-label">PLAY/PAUSE</span>
-              </div>
-              <div class="pill-wrap">
-                <button class="pill" id="btnAll">START</button>
-                <span class="pill-label">GALLERY</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="abtns" id="chRow" role="group" aria-label="Channels"></div>
         </div>
 
         <div class="boy-foot">
-          <button class="mini-power" id="powerBtn" aria-label="Power on or off">
-            <span class="led"></span>&#9167;
-          </button>
           <div class="speaker-dots" aria-hidden="true">
             <i></i><i></i><i></i><i></i><i></i><i></i>
           </div>
@@ -408,8 +357,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
   </section>
 
   <p class="demo-note">
-    D-pad up/down changes channel, left/right flips through pieces.
-    The round buttons jump straight to a channel. <b>START</b> opens the full gallery.
+    Five channel buttons up top, transport controls below, <b>POWER</b> on the right.
     This demo page is <code>tv-demo.html</code> in your repo.
   </p>
 </div>
@@ -418,33 +366,34 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
 
 <script>
 /* ============================================================
-   EDIT ME: your channels. One entry per round button.
+   EDIT ME: your channels. One entry per named button.
    key   -> must match your gallery key (openSquareMenu key)
    tint  -> the button + glow colour for this channel
+   fg    -> text colour on the button (dark for light tints)
    items -> videos play, images cycle. 3-4 each is plenty.
    ============================================================ */
 const CHANNELS = [
-  { key:'reels', label:'Reels', tint:'#4d9fff', items:[
+  { key:'reels', label:'Reels', tint:'#4d9fff', fg:'#ffffff', items:[
     { type:'video', src:'videos/m3.mp4' },
     { type:'video', src:'videos/m7.mp4' },
     { type:'video', src:'videos/m2.mp4' },
   ]},
-  { key:'posters', label:'Posters', tint:'#ffc300', items:[
+  { key:'posters', label:'Posters', tint:'#ffc300', fg:'#4a2c00', items:[
     { type:'image', src:'posters/pridefashionshow.jpg' },
     { type:'image', src:'posters/sourcecoverprint.jpg' },
     { type:'image', src:'posters/adoptdlua.jpg' },
   ]},
-  { key:'ads', label:'Ads', tint:'#ff9e3d', items:[
+  { key:'ads', label:'Ads', tint:'#ff9e3d', fg:'#4a2400', items:[
     { type:'video', src:'videos/paushta bread ad.mp4' },
     { type:'video', src:'videos/prembasket.mp4' },
     { type:'image', src:'spiral/sgs1.jpg' },
   ]},
-  { key:'branding', label:'Branding', tint:'#35d07f', items:[
+  { key:'branding', label:'Branding', tint:'#35d07f', fg:'#08331c', items:[
     { type:'image', src:'melodiverse/melo1.png' },
     { type:'image', src:'skg/skg1.png' },
     { type:'image', src:'comp/comp1.jpg' },
   ]},
-  { key:'content', label:'Content', tint:'#a78bfa', items:[
+  { key:'content', label:'Content', tint:'#a78bfa', fg:'#ffffff', items:[
     { type:'image', src:'my1hour/my1.jpg' },
     { type:'image', src:'amco/amco1.jpg' },
     { type:'image', src:'my1hour/my5.jpg' },
@@ -462,10 +411,10 @@ const tvImage = document.getElementById('tvImage');
 const staticCv = document.getElementById('staticCv');
 const sx = staticCv.getContext('2d');
 const osdEl = document.getElementById('osd');
-const deckTitle = document.getElementById('deckTitle');
-const deckSub = document.getElementById('deckSub');
 const powerBtn = document.getElementById('powerBtn');
 const btnPlay = document.getElementById('btnPlay');
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
 const btnAll = document.getElementById('btnAll');
 const chRow = document.getElementById('chRow');
 const mTiles = document.getElementById('mTiles');
@@ -561,7 +510,7 @@ tvVideo.addEventListener('ended', ()=>{ if(state.playing && powerOn) stepItem(1)
 
 /* ---------- channel surfing ---------- */
 function markButtons(){
-  document.querySelectorAll('.abtn').forEach((b,k)=>{
+  document.querySelectorAll('.chname').forEach((b,k)=>{
     b.classList.toggle('active', k === state.ch);
     b.setAttribute('aria-pressed', k === state.ch ? 'true' : 'false');
   });
@@ -573,9 +522,8 @@ async function tune(i, opts={}){
   const ch = CHANNELS[i];
   state.ch = i; state.playing = true;
   document.documentElement.style.setProperty('--glow', ch.tint);
-  deckTitle.textContent = ch.label.toUpperCase();
-  deckSub.textContent = `CH 0${i+1} / 0${CHANNELS.length}`;
   markButtons();
+  updatePlayBtn();
   staticStart();
   await Promise.all([showItem(0), wait(opts.quick ? 300 : 560)]);
   if(my !== tuneToken) return;
@@ -599,7 +547,10 @@ async function stepItem(d){
   pokeIdle();
 }
 
-/* ---------- transport: SELECT = play/pause, START = gallery ---------- */
+/* ---------- transport ---------- */
+function updatePlayBtn(){
+  btnPlay.innerHTML = state.playing ? '&#10074;&#10074;' : '&#9654;';
+}
 function togglePlay(){
   if(!powerOn) return;
   state.playing = !state.playing;
@@ -609,6 +560,7 @@ function togglePlay(){
   } else {
     if(state.playing) armImgTimer(); else clearImgTimer();
   }
+  updatePlayBtn();
   osd(state.playing ? 'PLAY' : 'PAUSED', 900);
   pokeIdle();
 }
@@ -619,16 +571,9 @@ function viewAll(){
   pokeIdle();
 }
 btnPlay.addEventListener('click', togglePlay);
+btnPrev.addEventListener('click', ()=>stepItem(-1));
+btnNext.addEventListener('click', ()=>stepItem(1));
 btnAll.addEventListener('click', viewAll);
-
-/* ---------- D-pad ---------- */
-document.querySelectorAll('.dp').forEach(b=>b.addEventListener('click', ()=>{
-  const k = b.dataset.k;
-  if(k === 'up') tune((state.ch + CHANNELS.length - 1) % CHANNELS.length);
-  else if(k === 'down') tune((state.ch + 1) % CHANNELS.length);
-  else if(k === 'left') stepItem(-1);
-  else stepItem(1);
-}));
 
 /* ---------- power ---------- */
 async function setPower(on){
@@ -727,14 +672,15 @@ document.addEventListener('visibilitychange', ()=>{
   }
 });
 
-/* ---------- build round channel buttons + mobile tiles ---------- */
+/* ---------- build named channel buttons + mobile tiles ---------- */
 CHANNELS.forEach((ch, i)=>{
   const b = document.createElement('button');
-  b.className = 'abtn';
+  b.className = 'chname';
   b.style.setProperty('--c', ch.tint);
+  b.style.setProperty('--fg', ch.fg || '#fff');
   b.setAttribute('aria-pressed', 'false');
   b.setAttribute('aria-label', `Channel ${i+1}: ${ch.label}`);
-  b.textContent = i + 1;
+  b.textContent = ch.label.toUpperCase();
   b.addEventListener('click', ()=>tune(i));
   chRow.appendChild(b);
 
