@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TANMAYTRON - Retro TV Demo</title>
+<title>Retro TV Demo</title>
 <meta name="description" content="Interactive retro television showcase demo. Press the channel buttons.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   TANMAYTRON - a cozy retro TV showcase (standalone demo)
+   Retro TV showcase (standalone demo)
    Plain CSS, no frameworks. Pixel font: 'Press Start 2P'.
    ============================================================ */
 :root{
@@ -119,7 +119,7 @@ body.tv-off .ambient{opacity:.05}
 
 /* cabinet */
 .cabinet{
-  position:relative;border-radius:26px;padding:26px 26px 22px;
+  position:relative;border-radius:26px;padding:22px 22px 18px;
   background:linear-gradient(165deg, var(--cab-hi) 0%, var(--cab) 38%, var(--cab-lo) 100%);
   border:1px solid #171310;
   box-shadow:
@@ -149,7 +149,7 @@ body:not(.tv-off) .cabinet{box-shadow:
 }
 body.tv-off .screen-bezel::after{opacity:.06}
 .screen{
-  position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:#000;
+  position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:#000;
   box-shadow:inset 0 0 40px rgba(0,0,0,.9);
 }
 .tube{position:absolute;inset:0}
@@ -209,19 +209,12 @@ body.tv-off .screen-bezel::after{opacity:.06}
 
 /* ---------- front panel: badge, dial, power ---------- */
 .panel-row{
-  display:flex;align-items:center;gap:18px;margin-top:20px;padding:2px 6px;
-}
-.badge{
-  font-family:var(--px);font-size:clamp(13px,3.4vw,19px);letter-spacing:3px;
-  background:linear-gradient(#f2f8ff 0%,#8fb4dd 42%,#33507a 50%,#a9c8ee 56%,#eef6ff 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 2px 2px rgba(0,0,0,.7));
-  user-select:none;white-space:nowrap;
+  display:flex;align-items:center;gap:14px;margin-top:12px;padding:2px 6px;
 }
 .panel-spacer{flex:1}
 .dial-block{display:flex;flex-direction:column;align-items:center;gap:6px}
 .dial{
-  width:58px;height:58px;border-radius:50%;position:relative;
+  width:46px;height:46px;border-radius:50%;position:relative;
   background:
     radial-gradient(circle at 34% 30%, #6b5f52, #3a322a 70%),
     #3a322a;
@@ -236,14 +229,14 @@ body.tv-off .screen-bezel::after{opacity:.06}
   mask:radial-gradient(circle, transparent 62%, #000 63%);
 }
 .dial-pointer{
-  position:absolute;left:50%;top:6px;width:4px;height:16px;border-radius:2px;
+  position:absolute;left:50%;top:5px;width:4px;height:13px;border-radius:2px;
   background:var(--amber);transform:translateX(-50%);
   box-shadow:0 0 6px rgba(255,176,58,.9);
 }
 .dial-label,.power-label{font-size:.6rem;letter-spacing:2px;color:#b9a88f}
 .power-block{display:flex;flex-direction:column;align-items:center;gap:6px}
 .power{
-  width:58px;height:58px;border-radius:50%;cursor:pointer;position:relative;
+  width:46px;height:46px;border-radius:50%;cursor:pointer;position:relative;
   background:radial-gradient(circle at 34% 30%, #6b5f52, #332b23 72%);
   border:2px solid #191410;color:#ffe9c9;
   box-shadow:0 4px 0 #171310, 0 7px 10px rgba(0,0,0,.5), inset 0 1px 2px rgba(255,235,200,.35);
@@ -258,7 +251,7 @@ body.tv-off .screen-bezel::after{opacity:.06}
 }
 body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.95)}
 .speaker{
-  margin-top:18px;height:44px;border-radius:10px;flex:1;max-width:100%;
+  margin-top:12px;height:30px;border-radius:10px;flex:1;max-width:100%;
   background-color:#1d1712;
   background-image:radial-gradient(circle, #000 1.8px, transparent 2.2px);
   background-size:11px 11px;background-position:center;
@@ -267,11 +260,11 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
 
 /* ---------- chunky channel buttons ---------- */
 .ch-row{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px;
 }
 .ch-btn{
   position:relative;cursor:pointer;border:1px solid #171310;border-radius:12px;
-  padding:13px 4px 11px;color:var(--ink);
+  padding:10px 4px 9px;color:var(--ink);
   background:linear-gradient(#6a5c4d, #453a2f 60%, #372e25);
   box-shadow:0 5px 0 #1c1611, 0 9px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,240,210,.35);
   transition:transform .07s, box-shadow .07s, border-color .3s;
@@ -296,7 +289,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
 .ch-btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 
 /* ---------- transport control strip ---------- */
-.ctl-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.ctl-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
 .ctl{
   cursor:pointer;border:1px solid #171310;border-radius:10px;padding:11px 4px;
   color:#ffd9a0;background:linear-gradient(#4e4438,#332b22);
@@ -312,12 +305,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
   box-shadow:0 4px 0 #8a5a1c, 0 7px 14px rgba(255,176,58,.25), inset 0 1px 0 rgba(255,255,255,.5);
 }
 .ctl-viewall:active{box-shadow:0 1px 0 #8a5a1c, 0 3px 8px rgba(0,0,0,.4)}
-
-/* drooping cable */
-.cable{
-  position:absolute;right:-34px;top:38%;width:150px;height:170px;z-index:0;
-  pointer-events:none;opacity:.9;
-}
+.ctl-icon{font-size:13px;padding:9px 4px;line-height:1.2}
 
 /* ---------- the little hint ---------- */
 .hint{
@@ -383,7 +371,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
   <div class="table"></div>
   <div class="table-wash"></div>
 
-  <p class="demo-kicker"><b>TANMAYTRON</b> &middot; INTERACTIVE TV DEMO</p>
+  <p class="demo-kicker"><b>RETRO TV</b> &middot; INTERACTIVE DEMO</p>
 
   <main class="tv-scene">
     <div class="tv" id="tv">
@@ -416,7 +404,6 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
         </div>
 
         <div class="panel-row">
-          <div class="badge">TANMAYTRON</div>
           <div class="panel-spacer"></div>
           <div class="dial-block">
             <div class="dial" id="dial"><span class="dial-pointer"></span></div>
@@ -434,19 +421,12 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
         <div class="ch-row" id="chRow" role="group" aria-label="Channels"></div>
 
         <div class="ctl-row">
-          <button class="ctl" id="btnPrev" aria-label="Previous item">PREV</button>
-          <button class="ctl" id="btnPlay" aria-label="Play or pause">PAUSE</button>
-          <button class="ctl" id="btnNext" aria-label="Next item">NEXT</button>
+          <button class="ctl ctl-icon" id="btnPrev" aria-label="Previous item">&#9198;</button>
+          <button class="ctl ctl-icon" id="btnPlay" aria-label="Play or pause">&#9208;</button>
+          <button class="ctl ctl-icon" id="btnNext" aria-label="Next item">&#9197;</button>
           <button class="ctl ctl-viewall" id="btnAll" aria-label="View full gallery">VIEW ALL</button>
         </div>
       </div>
-
-      <svg class="cable" viewBox="0 0 150 170" aria-hidden="true">
-        <path d="M8 6 C 70 30, 40 90, 120 130 S 140 160, 132 168"
-              stroke="#191614" stroke-width="8" fill="none" stroke-linecap="round"/>
-        <path d="M8 6 C 70 30, 40 90, 120 130 S 140 160, 132 168"
-              stroke="#3a332c" stroke-width="3" fill="none" stroke-linecap="round"/>
-      </svg>
     </div>
   </main>
 
@@ -650,7 +630,7 @@ async function stepItem(d){
 }
 
 /* ---------- transport controls ---------- */
-function updatePlayBtn(){ btnPlay.textContent = state.playing ? 'PAUSE' : 'PLAY'; }
+function updatePlayBtn(){ btnPlay.innerHTML = state.playing ? '&#9208;' : '&#9654;'; }
 function togglePlay(){
   if(!powerOn) return;
   state.playing = !state.playing;
@@ -683,7 +663,7 @@ async function setPower(on){
     powerOn = true;
     screen.classList.remove('dead');
     if(!RM) screen.classList.add('warming');
-    osd('TANMAYTRON', 1200);
+    osd('READY', 1200);
     await wait(RM ? 60 : 700);
     screen.classList.remove('warming');
     tune(state.ch, { quick:true, initial:true });
