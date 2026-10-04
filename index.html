@@ -1048,7 +1048,7 @@
       content: {
         label: 'Content', color: '#7c3aed',
         tabs: [
-          { label: 'Images', type: 'images', items: ['my1hour/my1.jpg','my1hour/my2.jpg','my1hour/my3.jpg','my1hour/my5.jpg','my1hour/my6.jpg','my1hour/my7.jpg','my1hour/my8.jpg','amco/amco1.jpg','amco/amco2.jpg','amco/amco3.jpg','amco/amco4.jpg','amco/amco5.jpg','amco/amco6.jpg'] },
+          { label: 'Images', type: 'images', items: ['my1hour/my1.jpg','my1hour/my2.jpg','my1hour/my3.jpg','my1hour/my5.jpg','my1hour/my6.jpg','my1hour/my7.jpg','my1hour/my8.jpg'] },
           { label: 'Videos', type: 'videos', items: ['videos/m1.mp4','videos/m2.mp4','videos/m3.mp4','videos/m4.mp4','videos/paushta bread ad.mp4','videos/prembasket.mp4','videos/risingcareers.mp4','videos/arigoy.mp4','videos/greenmilites.mp4'] }
         ]
       },
@@ -1272,7 +1272,7 @@ const DEMO_WORLDS = [
     { type:'image', src:'comp/comp1.jpg', cap:'COMP BRAND' },
   ]},
   { key:'content', label:'CONTENT', tint:'#a78bfa', fg:'#ffffff', items:[
-    { type:'image', src:'amco/amco1.jpg', cap:'AMCO 01' },
+    { type:'image', src:'my1hour/my7.jpg', cap:'MY1HOUR 07' },
     { type:'image', src:'my1hour/my5.jpg', cap:'MY1HOUR 05' },
     { type:'image', src:'my1hour/my6.jpg', cap:'MY1HOUR 06' },
   ]},
@@ -1428,8 +1428,10 @@ function hitBlock(){
     showItem(state.i,1,{bonus:ABOUT_CARD});
     floatTxt('MYSTERY!',50,20);
   } else {
-    let r; do{ r=(Math.random()*W.items.length)|0; }while(r===state.i && W.items.length>1);
-    showItem(r,1,{bonus:{...W.items[r],cap:'BONUS: '+(W.items[r].cap||W.label)}});
+    const pool=[];
+    WORLDS.forEach((W2)=>{ W2.items.forEach((it)=>{ pool.push({w:W2,it:it}); }); });
+    const pick=pool[(Math.random()*pool.length)|0]||{w:W,it:W.items[0]};
+    showItem(state.i,1,{bonus:{...pick.it,cap:'BONUS: '+(pick.it.cap||pick.w.label)}});
   }
 }
 
