@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TANMAYTRON - Retro TV Demo</title>
+<meta name="description" content="Interactive retro television showcase demo. Press the channel buttons.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TANMAYTRON - a cozy retro TV showcase (standalone demo)
+   Plain CSS, no frameworks. Pixel font: 'Press Start 2P'.
+   ============================================================ */
+:root{
+  --amber:#ffb03a;
+  --amber-deep:#ff8c1a;
+  --glow:#4d9fff;
+  --cab-hi:#5a4c40;
+  --cab:#3a3129;
+  --cab-lo:#241d16;
+  --ink:#ffe9c9;
+  --px:'Press Start 2P', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,Arial,sans-serif;
+  background:#05060d;color:#e8e2d4;min-height:100vh;overflow-x:hidden;
+}
+
+/* ---------- the dark cozy room ---------- */
+.room{
+  position:relative;min-height:100vh;overflow:hidden;
+  background:
+    radial-gradient(1100px 620px at 50% 26%, #1a2138 0%, #0e1226 52%, #06070f 100%);
+  display:flex;flex-direction:column;align-items:center;
+  padding:34px 16px 90px;
+}
+.room::after{ /* vignette */
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:5;
+  background:radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%);
+}
+.table{
+  position:absolute;left:0;right:0;bottom:0;height:24%;z-index:1;
+  background:
+    linear-gradient(rgba(255,176,58,.10), transparent 34%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.30) 0 2px, transparent 2px 90px),
+    linear-gradient(#4b3520, #2b1e11);
+  border-top:2px solid rgba(255,176,58,.28);
+  box-shadow:0 -18px 60px -20px rgba(255,176,58,.35);
+}
+.table-wash{ /* warm pool of TV light on the table */
+  position:absolute;left:50%;bottom:6%;width:min(720px,90vw);height:120px;z-index:2;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(closest-side, rgba(255,176,58,.34), transparent 70%);
+  filter:blur(18px);transition:opacity .8s;
+}
+body.tv-off .table-wash{opacity:.12}
+
+/* ambient halo behind the TV, tinted per channel */
+.ambient{
+  position:absolute;top:6%;left:50%;width:min(860px,120vw);height:min(860px,120vw);
+  transform:translateX(-50%);z-index:1;pointer-events:none;
+  background-color:var(--amber);opacity:.16;filter:blur(90px);border-radius:50%;
+  transition:background-color .9s ease, opacity .8s ease;
+}
+.tv{--glow:#4d9fff}
+.tv .ambient, .ambient{--x:0}
+body.tv-off .ambient{opacity:.05}
+
+/* dust motes drifting in the glow */
+#dust{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.mote{
+  position:absolute;border-radius:50%;background:#ffd9a0;filter:blur(1px);opacity:0;
+  animation:drift linear infinite;
+}
+@keyframes drift{
+  0%{transform:translate(0,10px);opacity:0}
+  18%{opacity:.75}
+  100%{transform:translate(26px,-110px);opacity:0}
+}
+
+/* ---------- demo captions ---------- */
+.demo-kicker{
+  position:relative;z-index:6;font-family:var(--px);font-size:11px;letter-spacing:2px;
+  color:#8f96b8;margin-bottom:26px;text-align:center;
+}
+.demo-kicker b{color:var(--amber)}
+.demo-note{
+  position:relative;z-index:6;max-width:560px;text-align:center;color:#9aa0bf;
+  font-size:.85rem;line-height:1.6;margin-top:34px;
+}
+.demo-note code{color:#ffd9a0;font-size:.78rem}
+
+/* ---------- the TV ---------- */
+.tv-scene{position:relative;z-index:4;width:min(560px,94vw)}
+.tv{position:relative;--glow:#4d9fff}
+
+/* antenna */
+.antenna{position:absolute;top:-104px;left:50%;width:0;height:0;z-index:0}
+.antenna i{
+  position:absolute;bottom:0;left:-2px;width:5px;height:118px;border-radius:3px;
+  background:linear-gradient(#8a847d,#3c3835);transform-origin:bottom center;
+  box-shadow:1px 1px 2px rgba(0,0,0,.6);
+}
+.antenna i::after{
+  content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+  width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b9b2a8,#5c564f);
+}
+.antenna .a-l{transform:rotate(24deg)}
+.antenna .a-r{transform:rotate(-24deg)}
+.antenna .a-base{
+  position:absolute;bottom:-6px;left:-16px;width:32px;height:14px;border-radius:4px;
+  background:linear-gradient(#4c453d,#2a241e);transform:none;
+}
+.antenna .a-base::after{display:none}
+
+/* cabinet */
+.cabinet{
+  position:relative;border-radius:26px;padding:26px 26px 22px;
+  background:linear-gradient(165deg, var(--cab-hi) 0%, var(--cab) 38%, var(--cab-lo) 100%);
+  border:1px solid #171310;
+  box-shadow:
+    inset 0 2px 3px rgba(255,235,200,.22),
+    inset 0 -6px 14px rgba(0,0,0,.5),
+    0 30px 60px -18px rgba(0,0,0,.75),
+    0 0 90px -30px var(--glow);
+  transition:box-shadow .9s ease;
+}
+body:not(.tv-off) .cabinet{box-shadow:
+    inset 0 2px 3px rgba(255,235,200,.22),
+    inset 0 -6px 14px rgba(0,0,0,.5),
+    0 30px 60px -18px rgba(0,0,0,.75),
+    0 0 110px -24px var(--glow);
+}
+
+/* screen bezel + glass */
+.screen-bezel{
+  position:relative;border-radius:20px;padding:18px;
+  background:linear-gradient(170deg,#241e18,#14100c);
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.8), 0 1px 0 rgba(255,235,200,.12);
+}
+.screen-bezel::after{ /* amber rim light hugging the screen, like the reference */
+  content:'';position:absolute;inset:18px;border-radius:12px;pointer-events:none;
+  box-shadow:0 0 22px 4px rgba(255,176,58,.5), inset 0 0 12px rgba(255,176,58,.35);
+  transition:opacity .8s;
+}
+body.tv-off .screen-bezel::after{opacity:.06}
+.screen{
+  position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:#000;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.9);
+}
+.tube{position:absolute;inset:0}
+.tube video,.tube img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:saturate(1.12) contrast(1.06) brightness(1.03) blur(.4px);
+}
+.tube img{opacity:0;transition:opacity .5s ease}
+.tube img.show{opacity:1}
+#staticCv{
+  position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .12s;
+  image-rendering:pixelated;pointer-events:none;
+}
+/* CRT dressing: scanlines, grille, vignette, sheen, flicker */
+.fx{position:absolute;inset:0;pointer-events:none}
+.fx-scan{background:repeating-linear-gradient(0deg, rgba(0,0,0,.20) 0 1px, transparent 1px 3px)}
+.fx-grille{background:repeating-linear-gradient(90deg, rgba(255,60,120,.035) 0 1px, rgba(60,255,120,.035) 1px 2px, rgba(90,60,255,.035) 2px 3px)}
+.fx-vig{background:radial-gradient(115% 100% at 50% 50%, transparent 58%, rgba(0,0,0,.52) 100%)}
+.fx-sheen{
+  background:
+    radial-gradient(90% 55% at 18% 0%, rgba(255,255,255,.10), transparent 60%),
+    linear-gradient(115deg, rgba(255,255,255,.06) 0%, transparent 28%);
+  animation:sheen 9s ease-in-out infinite alternate;
+}
+@keyframes sheen{from{opacity:.7}to{opacity:1}}
+.fx-flicker{background:#fff;opacity:0;animation:flick 5s steps(1) infinite}
+@keyframes flick{
+  0%,100%{opacity:0} 7%{opacity:.028} 8%{opacity:0} 31%{opacity:.045}
+  32%{opacity:0} 63%{opacity:.02} 64%{opacity:0} 89%{opacity:.035} 90%{opacity:0}
+}
+/* rolling wobble when a channel locks in */
+.screen.tuning .tube{animation:rollin .5s steps(3)}
+@keyframes rollin{from{transform:translateY(-5%)}to{transform:none}}
+/* power off: collapse to a line, then a dot */
+.screen.killing .tube{animation:crtoff .5s ease-in forwards}
+@keyframes crtoff{
+  0%{transform:scaleY(1);filter:brightness(1)}
+  55%{transform:scaleY(.008);filter:brightness(2.4)}
+  100%{transform:scaleY(.008) scaleX(0);filter:brightness(3.2)}
+}
+.screen.dead .tube{visibility:hidden}
+/* power on: dot blooms back */
+.screen.warming .tube{animation:crton .65s ease-out}
+@keyframes crton{
+  0%{transform:scale(.004);filter:brightness(3.2)}
+  55%{transform:scaleY(.012) scaleX(1);filter:brightness(2.2)}
+  100%{transform:scale(1);filter:brightness(1)}
+}
+/* on-screen display */
+.osd{
+  position:absolute;top:12px;left:14px;z-index:6;pointer-events:none;
+  font-family:var(--px);font-size:13px;letter-spacing:1px;color:#7dff6a;
+  text-shadow:0 0 8px rgba(125,255,106,.9), 2px 2px 0 rgba(0,40,0,.8);
+  opacity:0;transition:opacity .25s;
+}
+.osd.show{opacity:1}
+
+/* ---------- front panel: badge, dial, power ---------- */
+.panel-row{
+  display:flex;align-items:center;gap:18px;margin-top:20px;padding:2px 6px;
+}
+.badge{
+  font-family:var(--px);font-size:clamp(13px,3.4vw,19px);letter-spacing:3px;
+  background:linear-gradient(#f2f8ff 0%,#8fb4dd 42%,#33507a 50%,#a9c8ee 56%,#eef6ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.7));
+  user-select:none;white-space:nowrap;
+}
+.panel-spacer{flex:1}
+.dial-block{display:flex;flex-direction:column;align-items:center;gap:6px}
+.dial{
+  width:58px;height:58px;border-radius:50%;position:relative;
+  background:
+    radial-gradient(circle at 34% 30%, #6b5f52, #3a322a 70%),
+    #3a322a;
+  border:2px solid #191410;
+  box-shadow:0 3px 6px rgba(0,0,0,.6), inset 0 1px 2px rgba(255,235,200,.35);
+  transition:transform .45s cubic-bezier(.34,1.4,.64,1);
+}
+.dial::before{ /* tick marks */
+  content:'';position:absolute;inset:5px;border-radius:50%;
+  background:repeating-conic-gradient(rgba(255,233,201,.5) 0 2deg, transparent 2deg 30deg);
+  -webkit-mask:radial-gradient(circle, transparent 62%, #000 63%);
+  mask:radial-gradient(circle, transparent 62%, #000 63%);
+}
+.dial-pointer{
+  position:absolute;left:50%;top:6px;width:4px;height:16px;border-radius:2px;
+  background:var(--amber);transform:translateX(-50%);
+  box-shadow:0 0 6px rgba(255,176,58,.9);
+}
+.dial-label,.power-label{font-size:.6rem;letter-spacing:2px;color:#b9a88f}
+.power-block{display:flex;flex-direction:column;align-items:center;gap:6px}
+.power{
+  width:58px;height:58px;border-radius:50%;cursor:pointer;position:relative;
+  background:radial-gradient(circle at 34% 30%, #6b5f52, #332b23 72%);
+  border:2px solid #191410;color:#ffe9c9;
+  box-shadow:0 4px 0 #171310, 0 7px 10px rgba(0,0,0,.5), inset 0 1px 2px rgba(255,235,200,.35);
+  transition:transform .08s, box-shadow .08s;
+  font-size:20px;line-height:1;
+}
+.power:active{transform:translateY(3px);box-shadow:0 1px 0 #171310, 0 3px 6px rgba(0,0,0,.5)}
+.led{
+  position:absolute;top:8px;right:10px;width:9px;height:9px;border-radius:50%;
+  background:#ff5252;box-shadow:0 0 8px rgba(255,82,82,.95);
+  transition:background .3s, box-shadow .3s;
+}
+body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.95)}
+.speaker{
+  margin-top:18px;height:44px;border-radius:10px;flex:1;max-width:100%;
+  background-color:#1d1712;
+  background-image:radial-gradient(circle, #000 1.8px, transparent 2.2px);
+  background-size:11px 11px;background-position:center;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.8), 0 1px 0 rgba(255,235,200,.08);
+}
+
+/* ---------- chunky channel buttons ---------- */
+.ch-row{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px;
+}
+.ch-btn{
+  position:relative;cursor:pointer;border:1px solid #171310;border-radius:12px;
+  padding:13px 4px 11px;color:var(--ink);
+  background:linear-gradient(#6a5c4d, #453a2f 60%, #372e25);
+  box-shadow:0 5px 0 #1c1611, 0 9px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,240,210,.35);
+  transition:transform .07s, box-shadow .07s, border-color .3s;
+  font-family:var(--px);
+}
+.ch-btn .num{display:block;font-size:8px;color:#c9a37e}
+.ch-btn .lbl{display:block;font-size:9px;margin-top:7px;letter-spacing:1px}
+.ch-btn .dot{
+  position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;
+  background:#2a231c;box-shadow:inset 0 1px 2px rgba(0,0,0,.8);transition:all .3s;
+}
+.ch-btn:hover{filter:brightness(1.12)}
+.ch-btn:active,.ch-btn.pressed{
+  transform:translateY(4px);
+  box-shadow:0 1px 0 #1c1611, 0 3px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,240,210,.2);
+}
+.ch-btn.active{border-color:var(--glow)}
+.ch-btn.active .dot{background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.ch-btn.active{
+  box-shadow:0 5px 0 #1c1611, 0 0 18px -2px var(--glow), inset 0 1px 0 rgba(255,240,210,.35);
+}
+.ch-btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+
+/* ---------- transport control strip ---------- */
+.ctl-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.ctl{
+  cursor:pointer;border:1px solid #171310;border-radius:10px;padding:11px 4px;
+  color:#ffd9a0;background:linear-gradient(#4e4438,#332b22);
+  box-shadow:0 4px 0 #1c1611, 0 7px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,240,210,.28);
+  font-family:var(--px);font-size:8px;letter-spacing:1px;
+  transition:transform .07s, box-shadow .07s, filter .2s;
+}
+.ctl:hover{filter:brightness(1.15)}
+.ctl:active{transform:translateY(3px);box-shadow:0 1px 0 #1c1611, 0 3px 6px rgba(0,0,0,.45)}
+.ctl:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.ctl-viewall{
+  color:#1d1408;background:linear-gradient(#ffcf7d,#f0a13c);
+  box-shadow:0 4px 0 #8a5a1c, 0 7px 14px rgba(255,176,58,.25), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.ctl-viewall:active{box-shadow:0 1px 0 #8a5a1c, 0 3px 8px rgba(0,0,0,.4)}
+
+/* drooping cable */
+.cable{
+  position:absolute;right:-34px;top:38%;width:150px;height:170px;z-index:0;
+  pointer-events:none;opacity:.9;
+}
+
+/* ---------- the little hint ---------- */
+.hint{
+  position:absolute;left:50%;top:-84px;transform:translateX(-50%);z-index:7;
+  display:flex;align-items:center;gap:10px;pointer-events:none;
+  transition:opacity .5s, transform .5s;
+  animation:bob 2.6s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-7px)}}
+.hint.gone{opacity:0;transform:translateX(-50%) translateY(10px)}
+.hint .tag{
+  background:#141021;border:1px solid rgba(255,176,58,.5);color:#ffd9a0;
+  font-family:'Segoe Print','Comic Sans MS',cursive;font-size:.92rem;
+  padding:8px 14px;border-radius:14px;white-space:nowrap;
+  box-shadow:0 0 16px rgba(255,176,58,.25);
+}
+.hint svg{width:34px;height:40px;overflow:visible}
+.hint svg path{stroke:var(--amber);stroke-width:2.5;fill:none;stroke-linecap:round;
+  filter:drop-shadow(0 0 4px rgba(255,176,58,.8))}
+
+/* ---------- mobile fallback tiles ---------- */
+.m-tiles{display:none;position:relative;z-index:6;width:min(560px,94vw)}
+.m-tiles h2{
+  font-family:var(--px);font-size:12px;color:var(--amber);letter-spacing:2px;
+  margin-bottom:16px;text-align:center;
+}
+.m-tile{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  background:rgba(20,16,33,.85);border:1px solid rgba(255,176,58,.25);color:#f0e8d6;
+  border-radius:14px;padding:16px 18px;margin-bottom:12px;font-size:1rem;
+  transition:transform .15s, border-color .2s;
+}
+.m-tile:active{transform:scale(.98)}
+.m-tile .swatch{width:14px;height:14px;border-radius:50%;flex:none;box-shadow:0 0 10px currentColor}
+.m-tile .go{margin-left:auto;color:var(--amber)}
+@media (max-width:720px){
+  .tv-scene{display:none}
+  .m-tiles{display:block}
+  .demo-note{display:none}
+}
+
+/* ---------- toast (demo fallback) ---------- */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:#141021;border:1px solid rgba(255,176,58,.5);color:#ffd9a0;
+  padding:12px 20px;border-radius:30px;font-size:.9rem;z-index:99;opacity:0;
+  pointer-events:none;transition:opacity .3s, transform .3s;white-space:nowrap;
+  box-shadow:0 8px 30px rgba(0,0,0,.6);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---------- calm mode ---------- */
+@media (prefers-reduced-motion: reduce){
+  .fx-flicker,.fx-sheen,.hint,.mote{animation:none !important}
+  .hint{display:none}
+}
+</style>
+</head>
+<body class="tv-off">
+<div class="room">
+  <div class="ambient"></div>
+  <div id="dust"></div>
+  <div class="table"></div>
+  <div class="table-wash"></div>
+
+  <p class="demo-kicker"><b>TANMAYTRON</b> &middot; INTERACTIVE TV DEMO</p>
+
+  <main class="tv-scene">
+    <div class="tv" id="tv">
+      <div class="hint" id="hint">
+        <span class="tag">psst &mdash; press a button</span>
+        <svg viewBox="0 0 34 40" aria-hidden="true">
+          <path d="M6 4 C 20 10, 26 20, 24 34 M18 28 L24 35 L30 28"/>
+        </svg>
+      </div>
+
+      <div class="antenna" aria-hidden="true">
+        <i class="a-l"></i><i class="a-r"></i><i class="a-base"></i>
+      </div>
+
+      <div class="cabinet">
+        <div class="screen-bezel">
+          <div class="screen dead" id="screen">
+            <div class="tube" id="tube">
+              <video id="tvVideo" muted playsinline preload="none" disablepictureinpicture></video>
+              <img id="tvImage" alt="Showcase item">
+            </div>
+            <canvas id="staticCv" width="144" height="108" aria-hidden="true"></canvas>
+            <div class="fx fx-scan"></div>
+            <div class="fx fx-grille"></div>
+            <div class="fx fx-vig"></div>
+            <div class="fx fx-sheen"></div>
+            <div class="fx fx-flicker"></div>
+            <div class="osd" id="osd"></div>
+          </div>
+        </div>
+
+        <div class="panel-row">
+          <div class="badge">TANMAYTRON</div>
+          <div class="panel-spacer"></div>
+          <div class="dial-block">
+            <div class="dial" id="dial"><span class="dial-pointer"></span></div>
+            <span class="dial-label">CHANNEL</span>
+          </div>
+          <div class="power-block">
+            <button class="power" id="powerBtn" aria-label="Power on or off">
+              <span class="led"></span>&#9199;
+            </button>
+            <span class="power-label">POWER</span>
+          </div>
+        </div>
+        <div class="speaker" aria-hidden="true"></div>
+
+        <div class="ch-row" id="chRow" role="group" aria-label="Channels"></div>
+
+        <div class="ctl-row">
+          <button class="ctl" id="btnPrev" aria-label="Previous item">PREV</button>
+          <button class="ctl" id="btnPlay" aria-label="Play or pause">PAUSE</button>
+          <button class="ctl" id="btnNext" aria-label="Next item">NEXT</button>
+          <button class="ctl ctl-viewall" id="btnAll" aria-label="View full gallery">VIEW ALL</button>
+        </div>
+      </div>
+
+      <svg class="cable" viewBox="0 0 150 170" aria-hidden="true">
+        <path d="M8 6 C 70 30, 40 90, 120 130 S 140 160, 132 168"
+              stroke="#191614" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <path d="M8 6 C 70 30, 40 90, 120 130 S 140 160, 132 168"
+              stroke="#3a332c" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </main>
+
+  <section class="m-tiles" id="mTiles" aria-label="Categories">
+    <h2>PICK A CHANNEL</h2>
+  </section>
+
+  <p class="demo-note">
+    Press the chunky buttons to change channels. Videos play, posters cycle.
+    <b>VIEW ALL</b> opens the full gallery for that channel.
+    On the live site this wires straight into your existing gallery &mdash;
+    this demo page is <code>tv-demo.html</code> in your repo.
+  </p>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============================================================
+   EDIT ME: your channels. One entry per button.
+   key   -> must match your gallery key (openSquareMenu key)
+   tint  -> the glow colour for this channel
+   items -> videos play, images cycle. 3-4 each is plenty.
+   ============================================================ */
+const CHANNELS = [
+  { key:'reels', label:'Reels', tint:'#4d9fff', items:[
+    { type:'video', src:'videos/m3.mp4' },
+    { type:'video', src:'videos/m7.mp4' },
+    { type:'video', src:'videos/m2.mp4' },
+  ]},
+  { key:'posters', label:'Posters', tint:'#ffc300', items:[
+    { type:'image', src:'posters/pridefashionshow.jpg' },
+    { type:'image', src:'posters/sourcecoverprint.jpg' },
+    { type:'image', src:'posters/adoptdlua.jpg' },
+  ]},
+  { key:'ads', label:'Ads', tint:'#ff9e3d', items:[
+    { type:'video', src:'videos/paushta bread ad.mp4' },
+    { type:'video', src:'videos/prembasket.mp4' },
+    { type:'image', src:'spiral/sgs1.jpg' },
+  ]},
+  { key:'branding', label:'Branding', tint:'#35d07f', items:[
+    { type:'image', src:'melodiverse/melo1.png' },
+    { type:'image', src:'skg/skg1.png' },
+    { type:'image', src:'comp/comp1.jpg' },
+  ]},
+  { key:'content', label:'Content', tint:'#a78bfa', items:[
+    { type:'image', src:'my1hour/my1.jpg' },
+    { type:'image', src:'amco/amco1.jpg' },
+    { type:'image', src:'my1hour/my5.jpg' },
+  ]},
+];
+
+/* ============================================================
+   TV ENGINE
+   ============================================================ */
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tv = document.getElementById('tv');
+const screen = document.getElementById('screen');
+const tube = document.getElementById('tube');
+const tvVideo = document.getElementById('tvVideo');
+const tvImage = document.getElementById('tvImage');
+const staticCv = document.getElementById('staticCv');
+const sx = staticCv.getContext('2d');
+const osdEl = document.getElementById('osd');
+const dial = document.getElementById('dial');
+const powerBtn = document.getElementById('powerBtn');
+const btnPrev = document.getElementById('btnPrev');
+const btnPlay = document.getElementById('btnPlay');
+const btnNext = document.getElementById('btnNext');
+const btnAll = document.getElementById('btnAll');
+const chRow = document.getElementById('chRow');
+const mTiles = document.getElementById('mTiles');
+const hint = document.getElementById('hint');
+const toastEl = document.getElementById('toast');
+
+const DIAL_ANGLES = [-54, -27, 0, 27, 54];
+const state = { ch: 0, idx: 0, playing: true };
+let powerOn = false, tuneToken = 0, tvVisible = true;
+
+const wait = (ms) => new Promise(r => setTimeout(r, ms));
+const currentItem = () => CHANNELS[state.ch].items[state.idx];
+
+/* ---------- toast + OSD ---------- */
+let toastT = null;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>toastEl.classList.remove('show'), 2300);
+}
+let osdT = null;
+function osd(msg, ms=1500){
+  osdEl.textContent = msg;
+  osdEl.classList.add('show');
+  clearTimeout(osdT);
+  osdT = setTimeout(()=>osdEl.classList.remove('show'), ms);
+}
+
+/* ---------- static noise ---------- */
+let staticRAF = null, lastStatic = 0;
+function noiseFrame(){
+  const d = sx.createImageData(144, 108), b = d.data;
+  for(let i=0; i<b.length; i+=4){
+    const v = (Math.random()*255)|0;
+    b[i]=b[i+1]=b[i+2]=v; b[i+3]=255;
+  }
+  sx.putImageData(d, 0, 0);
+}
+function staticStart(){
+  if(RM) return;
+  staticCv.style.opacity = '1';
+  const loop = (t)=>{
+    if(t - lastStatic > 80){ noiseFrame(); lastStatic = t; }
+    staticRAF = requestAnimationFrame(loop);
+  };
+  loop(0);
+}
+function staticStop(){
+  if(staticRAF) cancelAnimationFrame(staticRAF);
+  staticRAF = null;
+  staticCv.style.opacity = '0';
+}
+
+/* ---------- media plumbing ---------- */
+let imgT = null;
+function clearImgTimer(){ clearInterval(imgT); imgT = null; }
+function armImgTimer(){
+  clearImgTimer();
+  imgT = setInterval(()=>{ if(state.playing && powerOn) stepItem(1); }, 4500);
+}
+function showItem(j){
+  return new Promise((resolve)=>{
+    const ch = CHANNELS[state.ch], n = ch.items.length;
+    state.idx = ((j % n) + n) % n;
+    const item = ch.items[state.idx];
+    clearImgTimer();
+    tvVideo.oncanplay = tvVideo.onerror = null;
+    tvVideo.pause();
+    tvVideo.removeAttribute('src');
+    tvVideo.load();
+    tvImage.onload = tvImage.onerror = null;
+    tvImage.classList.remove('show');
+    let done = false;
+    const finish = ()=>{ if(!done){ done = true; resolve(); } };
+    const to = setTimeout(finish, 4000);
+    const ok = ()=>{ clearTimeout(to); finish(); };
+    if(item.type === 'video'){
+      tvVideo.oncanplay = ()=>{ tvVideo.oncanplay = null; if(state.playing && powerOn) tvVideo.play().catch(()=>{}); ok(); };
+      tvVideo.onerror = ok;
+      tvVideo.src = item.src;
+      tvVideo.load();
+    } else {
+      tvImage.onload = ()=>{ tvImage.onload = null; tvImage.classList.add('show'); if(state.playing) armImgTimer(); ok(); };
+      tvImage.onerror = ok;
+      tvImage.alt = ch.label + ' showcase piece';
+      tvImage.src = item.src;
+    }
+    const nx = ch.items[(state.idx+1) % n];
+    if(nx.type === 'image'){ const p = new Image(); p.src = nx.src; }
+  });
+}
+tvVideo.addEventListener('ended', ()=>{ if(state.playing && powerOn) stepItem(1); });
+
+/* ---------- channel surfing ---------- */
+function markButtons(){
+  document.querySelectorAll('.ch-btn').forEach((b,k)=>{
+    b.classList.toggle('active', k === state.ch);
+    b.setAttribute('aria-pressed', k === state.ch ? 'true' : 'false');
+  });
+}
+async function tune(i, opts={}){
+  if(!powerOn) return;
+  const my = ++tuneToken;
+  if(!opts.auto){ dismissHint(); stopAttract(); }
+  const ch = CHANNELS[i];
+  state.ch = i; state.playing = true; updatePlayBtn();
+  document.documentElement.style.setProperty('--glow', ch.tint);
+  dial.style.transform = `rotate(${DIAL_ANGLES[i]}deg)`;
+  markButtons();
+  staticStart();
+  await Promise.all([showItem(0), wait(opts.quick ? 300 : 560)]);
+  if(my !== tuneToken) return;
+  staticStop();
+  screen.classList.remove('tuning');
+  void screen.offsetWidth;
+  if(!RM) screen.classList.add('tuning');
+  setTimeout(()=>screen.classList.remove('tuning'), 550);
+  osd(`CH 0${i+1}: ${ch.label.toUpperCase()}`);
+  if(!opts.auto) pokeIdle();
+}
+async function stepItem(d){
+  if(!powerOn) return;
+  const my = ++tuneToken;
+  dismissHint(); stopAttract();
+  staticStart();
+  await Promise.race([showItem(state.idx + d), wait(700)]);
+  if(my !== tuneToken) return;
+  if(!RM) await wait(140);
+  staticStop();
+  pokeIdle();
+}
+
+/* ---------- transport controls ---------- */
+function updatePlayBtn(){ btnPlay.textContent = state.playing ? 'PAUSE' : 'PLAY'; }
+function togglePlay(){
+  if(!powerOn) return;
+  state.playing = !state.playing;
+  const item = currentItem();
+  if(item.type === 'video'){
+    if(state.playing) tvVideo.play().catch(()=>{}); else tvVideo.pause();
+  } else {
+    if(state.playing) armImgTimer(); else clearImgTimer();
+  }
+  updatePlayBtn();
+  osd(state.playing ? 'PLAY' : 'PAUSED', 900);
+  pokeIdle();
+}
+function viewAll(){
+  const ch = CHANNELS[state.ch];
+  if(typeof window.openSquareMenu === 'function') window.openSquareMenu(ch.key);
+  else toast(`${ch.label} gallery would open here on the live site`);
+  pokeIdle();
+}
+btnPrev.addEventListener('click', ()=>stepItem(-1));
+btnNext.addEventListener('click', ()=>stepItem(1));
+btnPlay.addEventListener('click', togglePlay);
+btnAll.addEventListener('click', viewAll);
+
+/* ---------- power ---------- */
+async function setPower(on){
+  if(on === powerOn) return;
+  if(on){
+    document.body.classList.remove('tv-off');
+    powerOn = true;
+    screen.classList.remove('dead');
+    if(!RM) screen.classList.add('warming');
+    osd('TANMAYTRON', 1200);
+    await wait(RM ? 60 : 700);
+    screen.classList.remove('warming');
+    tune(state.ch, { quick:true });
+  } else {
+    dismissHint(); stopAttract(); clearImgTimer();
+    tvVideo.pause(); staticStop();
+    if(!RM){
+      screen.classList.add('killing');
+      await wait(520);
+      screen.classList.remove('killing');
+    }
+    screen.classList.add('dead');
+    document.body.classList.add('tv-off');
+    powerOn = false;
+  }
+}
+powerBtn.addEventListener('click', ()=>setPower(!powerOn));
+
+/* ---------- hint ---------- */
+function dismissHint(){
+  if(hint.classList.contains('gone')) return;
+  hint.classList.add('gone');
+  try{ localStorage.setItem('tron_hint','1'); }catch(e){}
+  setTimeout(()=>{ hint.style.display = 'none'; }, 650);
+}
+try{ if(localStorage.getItem('tron_hint')){ hint.classList.add('gone'); hint.style.display='none'; } }catch(e){}
+
+/* ---------- dust motes ---------- */
+if(!RM){
+  const dust = document.getElementById('dust');
+  for(let i=0; i<16; i++){
+    const m = document.createElement('span');
+    m.className = 'mote';
+    const s = (2 + Math.random()*3).toFixed(1);
+    m.style.left = (8 + Math.random()*84) + '%';
+    m.style.top = (12 + Math.random()*58) + '%';
+    m.style.width = m.style.height = s + 'px';
+    m.style.animationDuration = (6 + Math.random()*8).toFixed(1) + 's';
+    m.style.animationDelay = (-Math.random()*10).toFixed(1) + 's';
+    dust.appendChild(m);
+  }
+}
+
+/* ---------- idle attract mode ---------- */
+let idleT = null, attractT = null;
+function pokeIdle(){
+  clearTimeout(idleT); stopAttract();
+  if(RM || !powerOn) return;
+  idleT = setTimeout(startAttract, 12000);
+}
+function startAttract(){
+  if(!powerOn || !tvVisible || document.hidden){ pokeIdle(); return; }
+  attractT = setInterval(()=>{
+    if(!powerOn || !tvVisible || document.hidden) return;
+    tune((state.ch + 1) % CHANNELS.length, { quick:true, auto:true });
+  }, 7000);
+}
+function stopAttract(){ clearInterval(attractT); attractT = null; }
+['pointerdown','keydown'].forEach(ev =>
+  tv.addEventListener(ev, ()=>{ if(powerOn && !attractT) pokeIdle(); }, { passive:true })
+);
+
+/* ---------- pause when off-screen / tab hidden ---------- */
+new IntersectionObserver((es)=>{
+  es.forEach(e=>{
+    tvVisible = e.isIntersecting;
+    if(!tvVisible){ tvVideo.pause(); clearImgTimer(); }
+    else if(powerOn && state.playing){
+      const it = currentItem();
+      if(it.type === 'video') tvVideo.play().catch(()=>{});
+      else armImgTimer();
+    }
+  });
+}, { threshold:.12 }).observe(tv);
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden){ tvVideo.pause(); clearImgTimer(); }
+  else if(powerOn && state.playing){
+    const it = currentItem();
+    if(it.type === 'video') tvVideo.play().catch(()=>{});
+    else armImgTimer();
+  }
+});
+
+/* ---------- build buttons + mobile tiles ---------- */
+CHANNELS.forEach((ch, i)=>{
+  const b = document.createElement('button');
+  b.className = 'ch-btn';
+  b.setAttribute('aria-pressed', 'false');
+  b.setAttribute('aria-label', `Channel ${i+1}: ${ch.label}`);
+  b.innerHTML = `<span class="dot"></span><span class="num">0${i+1}</span><span class="lbl">${ch.label.toUpperCase()}</span>`;
+  b.addEventListener('click', ()=>{
+    b.classList.add('pressed');
+    setTimeout(()=>b.classList.remove('pressed'), 170);
+    tune(i);
+  });
+  chRow.appendChild(b);
+
+  const t = document.createElement('button');
+  t.className = 'm-tile';
+  t.innerHTML = `<span class="swatch" style="color:${ch.tint};background:${ch.tint}"></span><span>${ch.label}</span><span class="go">&rarr;</span>`;
+  t.addEventListener('click', ()=>{
+    if(typeof window.openSquareMenu === 'function') window.openSquareMenu(ch.key);
+    else toast(`${ch.label} gallery would open here on the live site`);
+  });
+  mTiles.appendChild(t);
+});
+
+/* ---------- warm up the set ---------- */
+updatePlayBtn();
+setTimeout(()=>setPower(true), 700);
+</script>
+</body>
+</html>
