@@ -3,25 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Retro TV Demo</title>
-<meta name="description" content="Interactive retro television showcase demo. Press the channel buttons.">
+<title>Pixel Handheld Demo</title>
+<meta name="description" content="Interactive pixel handheld showcase demo. Press the buttons.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   Retro TV showcase (standalone demo)
+   POCKET PIXEL - a handheld showcase (standalone demo)
    Plain CSS, no frameworks. Pixel font: 'Press Start 2P'.
    ============================================================ */
 :root{
   --amber:#ffb03a;
-  --amber-deep:#ff8c1a;
   --glow:#4d9fff;
-  --cab-hi:#5a4c40;
-  --cab:#3a3129;
-  --cab-lo:#241d16;
-  --ink:#ffe9c9;
   --px:'Press Start 2P', monospace;
+  --shell-hi:#f05645;
+  --shell:#d9382a;
+  --shell-lo:#a32418;
+  --cream-hi:#f8eed4;
+  --cream:#eedcae;
+  --cream-lo:#d9c491;
+  --ink:#5a3a20;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -38,7 +40,7 @@ body{
   display:flex;flex-direction:column;align-items:center;
   padding:34px 16px 90px;
 }
-.room::after{ /* vignette */
+.room::after{
   content:'';position:absolute;inset:0;pointer-events:none;z-index:5;
   background:radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%);
 }
@@ -51,26 +53,20 @@ body{
   border-top:2px solid rgba(255,176,58,.28);
   box-shadow:0 -18px 60px -20px rgba(255,176,58,.35);
 }
-.table-wash{ /* warm pool of TV light on the table */
+.table-wash{
   position:absolute;left:50%;bottom:6%;width:min(720px,90vw);height:120px;z-index:2;
   transform:translateX(-50%);pointer-events:none;
   background:radial-gradient(closest-side, rgba(255,176,58,.34), transparent 70%);
   filter:blur(18px);transition:opacity .8s;
 }
 body.tv-off .table-wash{opacity:.12}
-
-/* ambient halo behind the TV, tinted per channel */
 .ambient{
   position:absolute;top:6%;left:50%;width:min(860px,120vw);height:min(860px,120vw);
   transform:translateX(-50%);z-index:1;pointer-events:none;
-  background-color:var(--amber);opacity:.16;filter:blur(90px);border-radius:50%;
+  background-color:var(--glow);opacity:.16;filter:blur(90px);border-radius:50%;
   transition:background-color .9s ease, opacity .8s ease;
 }
-.tv{--glow:#4d9fff}
-.tv .ambient, .ambient{--x:0}
 body.tv-off .ambient{opacity:.05}
-
-/* dust motes drifting in the glow */
 #dust{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
 .mote{
   position:absolute;border-radius:50%;background:#ffd9a0;filter:blur(1px);opacity:0;
@@ -82,7 +78,6 @@ body.tv-off .ambient{opacity:.05}
   100%{transform:translate(26px,-110px);opacity:0}
 }
 
-/* ---------- demo captions ---------- */
 .demo-kicker{
   position:relative;z-index:6;font-family:var(--px);font-size:11px;letter-spacing:2px;
   color:#8f96b8;margin-bottom:26px;text-align:center;
@@ -94,62 +89,42 @@ body.tv-off .ambient{opacity:.05}
 }
 .demo-note code{color:#ffd9a0;font-size:.78rem}
 
-/* ---------- the TV ---------- */
+/* ---------- the handheld ---------- */
 .tv-scene{position:relative;z-index:4;width:min(560px,94vw)}
 .tv{position:relative}
-
-/* antenna */
-.antenna{position:absolute;top:-104px;left:50%;width:0;height:0;z-index:0}
-.antenna i{
-  position:absolute;bottom:0;left:-2px;width:5px;height:118px;border-radius:3px;
-  background:linear-gradient(#8a847d,#3c3835);transform-origin:bottom center;
-  box-shadow:1px 1px 2px rgba(0,0,0,.6);
-}
-.antenna i::after{
-  content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);
-  width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b9b2a8,#5c564f);
-}
-.antenna .a-l{transform:rotate(24deg)}
-.antenna .a-r{transform:rotate(-24deg)}
-.antenna .a-base{
-  position:absolute;bottom:-6px;left:-16px;width:32px;height:14px;border-radius:4px;
-  background:linear-gradient(#4c453d,#2a241e);transform:none;
-}
-.antenna .a-base::after{display:none}
-
-/* cabinet */
-.cabinet{
-  position:relative;border-radius:26px;padding:22px 22px 18px;
-  background:linear-gradient(165deg, var(--cab-hi) 0%, var(--cab) 38%, var(--cab-lo) 100%);
-  border:1px solid #171310;
+.boy{
+  position:relative;border-radius:30px;padding:26px 22px 20px;
+  background:linear-gradient(165deg, var(--shell-hi) 0%, var(--shell) 45%, var(--shell-lo) 100%);
+  border:1px solid #7c1a10;
   box-shadow:
-    inset 0 2px 3px rgba(255,235,200,.22),
-    inset 0 -6px 14px rgba(0,0,0,.5),
-    0 30px 60px -18px rgba(0,0,0,.75),
-    0 0 90px -30px var(--glow);
-  transition:box-shadow .9s ease;
-}
-body:not(.tv-off) .cabinet{box-shadow:
-    inset 0 2px 3px rgba(255,235,200,.22),
-    inset 0 -6px 14px rgba(0,0,0,.5),
+    inset 0 2px 4px rgba(255,255,255,.35),
+    inset 0 -8px 16px rgba(0,0,0,.28),
     0 30px 60px -18px rgba(0,0,0,.75),
     0 0 110px -24px var(--glow);
+  transition:box-shadow .9s ease;
+}
+body.tv-off .boy{box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.35),
+    inset 0 -8px 16px rgba(0,0,0,.28),
+    0 30px 60px -18px rgba(0,0,0,.75),
+    0 0 40px -30px var(--glow);
 }
 
-/* screen bezel + glass */
-.screen-bezel{
-  position:relative;border-radius:20px;padding:18px;
-  background:linear-gradient(170deg,#241e18,#14100c);
-  box-shadow:inset 0 2px 8px rgba(0,0,0,.8), 0 1px 0 rgba(255,235,200,.12);
+/* screen */
+.boy-screen-bezel{
+  border-radius:16px;padding:16px;
+  background:linear-gradient(170deg,#2a2a31,#141418);
+  box-shadow:inset 0 3px 10px rgba(0,0,0,.85), 0 1px 0 rgba(255,255,255,.28);
+  position:relative;
 }
-.screen-bezel::after{ /* amber rim light hugging the screen, like the reference */
-  content:'';position:absolute;inset:18px;border-radius:12px;pointer-events:none;
-  box-shadow:0 0 22px 4px rgba(255,176,58,.5), inset 0 0 12px rgba(255,176,58,.35);
+.boy-screen-bezel::after{
+  content:'';position:absolute;inset:16px;border-radius:8px;pointer-events:none;
+  box-shadow:0 0 22px 4px rgba(255,176,58,.45), inset 0 0 12px rgba(255,176,58,.3);
   transition:opacity .8s;
 }
-body.tv-off .screen-bezel::after{opacity:.06}
+body.tv-off .boy-screen-bezel::after{opacity:.06}
 .screen{
-  position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:#000;
+  position:relative;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:#000;
   box-shadow:inset 0 0 40px rgba(0,0,0,.9);
 }
 .tube{position:absolute;inset:0}
@@ -163,7 +138,6 @@ body.tv-off .screen-bezel::after{opacity:.06}
   position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .12s;
   image-rendering:pixelated;pointer-events:none;
 }
-/* CRT dressing: scanlines, grille, vignette, sheen, flicker */
 .fx{position:absolute;inset:0;pointer-events:none}
 .fx-scan{background:repeating-linear-gradient(0deg, rgba(0,0,0,.20) 0 1px, transparent 1px 3px)}
 .fx-grille{background:repeating-linear-gradient(90deg, rgba(255,60,120,.035) 0 1px, rgba(60,255,120,.035) 1px 2px, rgba(90,60,255,.035) 2px 3px)}
@@ -180,10 +154,8 @@ body.tv-off .screen-bezel::after{opacity:.06}
   0%,100%{opacity:0} 7%{opacity:.028} 8%{opacity:0} 31%{opacity:.045}
   32%{opacity:0} 63%{opacity:.02} 64%{opacity:0} 89%{opacity:.035} 90%{opacity:0}
 }
-/* rolling wobble when a channel locks in */
 .screen.tuning .tube{animation:rollin .5s steps(3)}
 @keyframes rollin{from{transform:translateY(-5%)}to{transform:none}}
-/* power off: collapse to a line, then a dot */
 .screen.killing .tube{animation:crtoff .5s ease-in forwards}
 @keyframes crtoff{
   0%{transform:scaleY(1);filter:brightness(1)}
@@ -191,14 +163,12 @@ body.tv-off .screen-bezel::after{opacity:.06}
   100%{transform:scaleY(.008) scaleX(0);filter:brightness(3.2)}
 }
 .screen.dead .tube{visibility:hidden}
-/* power on: dot blooms back */
 .screen.warming .tube{animation:crton .65s ease-out}
 @keyframes crton{
   0%{transform:scale(.004);filter:brightness(3.2)}
   55%{transform:scaleY(.012) scaleX(1);filter:brightness(2.2)}
   100%{transform:scale(1);filter:brightness(1)}
 }
-/* on-screen display */
 .osd{
   position:absolute;top:12px;left:14px;z-index:6;pointer-events:none;
   font-family:var(--px);font-size:13px;letter-spacing:1px;color:#7dff6a;
@@ -207,105 +177,97 @@ body.tv-off .screen-bezel::after{opacity:.06}
 }
 .osd.show{opacity:1}
 
-/* ---------- front panel: badge, dial, power ---------- */
-.panel-row{
-  display:flex;align-items:center;gap:14px;margin-top:12px;padding:2px 6px;
+/* ---------- cream control deck ---------- */
+.deck{
+  margin-top:20px;border-radius:18px;padding:20px 18px;
+  background:linear-gradient(175deg, var(--cream-hi), var(--cream) 60%, var(--cream-lo));
+  border:1px solid #b89a5e;
+  box-shadow:inset 0 2px 5px rgba(255,255,255,.6), inset 0 -4px 8px rgba(120,85,30,.25),
+             0 2px 6px rgba(0,0,0,.25);
+  display:flex;align-items:center;gap:16px;
 }
-.panel-spacer{flex:1}
-.dial-block{display:flex;flex-direction:column;align-items:center;gap:6px}
-.dial{
-  width:46px;height:46px;border-radius:50%;position:relative;
-  background:
-    radial-gradient(circle at 34% 30%, #6b5f52, #3a322a 70%),
-    #3a322a;
-  border:2px solid #191410;
-  box-shadow:0 3px 6px rgba(0,0,0,.6), inset 0 1px 2px rgba(255,235,200,.35);
-  transition:transform .45s cubic-bezier(.34,1.4,.64,1);
+/* D-pad: up/down = channel, left/right = prev/next item */
+.dpad{position:relative;width:124px;height:124px;flex:none}
+.dpad .bar{
+  position:absolute;background:linear-gradient(#41414d,#26262e);border-radius:9px;
+  box-shadow:0 5px 0 #101016, inset 0 2px 3px rgba(255,255,255,.18);
 }
-.dial::before{ /* tick marks */
-  content:'';position:absolute;inset:5px;border-radius:50%;
-  background:repeating-conic-gradient(rgba(255,233,201,.5) 0 2deg, transparent 2deg 30deg);
-  -webkit-mask:radial-gradient(circle, transparent 62%, #000 63%);
-  mask:radial-gradient(circle, transparent 62%, #000 63%);
+.dpad .bar.v{left:42px;top:0;width:40px;height:124px}
+.dpad .bar.h{top:42px;left:0;width:124px;height:40px}
+.dpad .dp{
+  position:absolute;width:40px;height:40px;z-index:2;background:transparent;border:none;
+  color:#cfcfda;font-size:13px;cursor:pointer;padding:0;
 }
-.dial-pointer{
-  position:absolute;left:50%;top:5px;width:4px;height:13px;border-radius:2px;
-  background:var(--amber);transform:translateX(-50%);
-  box-shadow:0 0 6px rgba(255,176,58,.9);
+.dpad .dp:active{color:var(--amber)}
+.dp.up{left:42px;top:0}
+.dp.down{left:42px;bottom:0}
+.dp.left{left:0;top:42px}
+.dp.right{right:0;top:42px}
+.dp-center{
+  position:absolute;left:42px;top:42px;width:40px;height:40px;border-radius:50%;z-index:1;
+  background:radial-gradient(circle at 35% 30%, #54545f, #232329);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.6);
 }
-.dial-label,.power-label{font-size:.6rem;letter-spacing:2px;color:#b9a88f}
-.power-block{display:flex;flex-direction:column;align-items:center;gap:6px}
-.power{
-  width:46px;height:46px;border-radius:50%;cursor:pointer;position:relative;
-  background:radial-gradient(circle at 34% 30%, #6b5f52, #332b23 72%);
-  border:2px solid #191410;color:#ffe9c9;
-  box-shadow:0 4px 0 #171310, 0 7px 10px rgba(0,0,0,.5), inset 0 1px 2px rgba(255,235,200,.35);
-  transition:transform .08s, box-shadow .08s;
-  font-size:20px;line-height:1;
+.dp:focus-visible{outline:2px solid #b03a28;outline-offset:2px;border-radius:6px}
+
+/* middle: pixel channel title + SELECT/START pills */
+.deck-mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+.deck-title{
+  font-family:var(--px);font-size:clamp(13px,3.6vw,19px);letter-spacing:2px;
+  color:#b03a28;text-shadow:2px 2px 0 rgba(176,58,40,.16);
+  white-space:nowrap;
 }
-.power:active{transform:translateY(3px);box-shadow:0 1px 0 #171310, 0 3px 6px rgba(0,0,0,.5)}
+.deck-sub{
+  font-family:var(--px);font-size:8px;letter-spacing:2px;color:#a5824f;
+}
+.pills{display:flex;gap:16px}
+.pill-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
+.pill{
+  width:76px;padding:10px 0;border:none;border-radius:14px;cursor:pointer;
+  background:linear-gradient(#5a4636,#33271c);color:#f5e6c8;
+  font-family:var(--px);font-size:8px;letter-spacing:1px;
+  box-shadow:0 4px 0 #1d140c, inset 0 1px 2px rgba(255,255,255,.25);
+  transition:transform .07s, box-shadow .07s;
+}
+.pill:active{transform:translateY(3px);box-shadow:0 1px 0 #1d140c}
+.pill:focus-visible{outline:2px solid #b03a28;outline-offset:2px}
+.pill-label{font-size:.58rem;letter-spacing:2px;color:#8a6f4d}
+
+/* round channel buttons */
+.abtns{display:flex;gap:10px;flex:none}
+.abtn{
+  width:44px;height:44px;border-radius:50%;cursor:pointer;
+  border:2px solid rgba(0,0,0,.22);background:var(--c);color:#fff;
+  font-family:var(--px);font-size:10px;
+  box-shadow:0 4px 0 rgba(0,0,0,.28), inset 0 2px 3px rgba(255,255,255,.45);
+  transition:transform .07s, box-shadow .07s;
+}
+.abtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.abtn.active{box-shadow:0 4px 0 rgba(0,0,0,.28), 0 0 18px var(--c);outline:3px solid rgba(255,255,255,.55)}
+.abtn:focus-visible{outline:3px solid #b03a28;outline-offset:2px}
+
+/* power + speaker on the red shell */
+.boy-foot{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding:0 10px}
+.mini-power{
+  width:44px;height:44px;border-radius:50%;cursor:pointer;position:relative;
+  background:radial-gradient(circle at 35% 30%, #ff8a7a, var(--shell) 72%);
+  border:2px solid #8f1f14;color:#fff;font-size:15px;
+  box-shadow:0 3px 0 #7c1a10, inset 0 1px 2px rgba(255,255,255,.45);
+  transition:transform .07s, box-shadow .07s;
+}
+.mini-power:active{transform:translateY(2px);box-shadow:0 1px 0 #7c1a10}
+.mini-power:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .led{
-  position:absolute;top:8px;right:10px;width:9px;height:9px;border-radius:50%;
+  position:absolute;top:4px;right:6px;width:8px;height:8px;border-radius:50%;
   background:#ff5252;box-shadow:0 0 8px rgba(255,82,82,.95);
   transition:background .3s, box-shadow .3s;
 }
 body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.95)}
-.speaker{
-  margin-top:12px;height:30px;border-radius:10px;flex:1;max-width:100%;
-  background-color:#1d1712;
-  background-image:radial-gradient(circle, #000 1.8px, transparent 2.2px);
-  background-size:11px 11px;background-position:center;
-  box-shadow:inset 0 2px 6px rgba(0,0,0,.8), 0 1px 0 rgba(255,235,200,.08);
+.speaker-dots{display:grid;grid-template-columns:repeat(6,10px);gap:7px;transform:rotate(-18deg)}
+.speaker-dots i{
+  width:9px;height:9px;border-radius:50%;background:#8f1f14;
+  box-shadow:inset 0 2px 3px rgba(0,0,0,.55), 0 1px 0 rgba(255,255,255,.25);
 }
-
-/* ---------- chunky channel buttons ---------- */
-.ch-row{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px;
-}
-.ch-btn{
-  position:relative;cursor:pointer;border:1px solid #171310;border-radius:12px;
-  padding:10px 4px 9px;color:var(--ink);
-  background:linear-gradient(#6a5c4d, #453a2f 60%, #372e25);
-  box-shadow:0 5px 0 #1c1611, 0 9px 14px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,240,210,.35);
-  transition:transform .07s, box-shadow .07s, border-color .3s;
-  font-family:var(--px);
-}
-.ch-btn .num{display:block;font-size:8px;color:#c9a37e}
-.ch-btn .lbl{display:block;font-size:9px;margin-top:7px;letter-spacing:1px}
-.ch-btn .dot{
-  position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;
-  background:#2a231c;box-shadow:inset 0 1px 2px rgba(0,0,0,.8);transition:all .3s;
-}
-.ch-btn:hover{filter:brightness(1.12)}
-.ch-btn:active,.ch-btn.pressed{
-  transform:translateY(4px);
-  box-shadow:0 1px 0 #1c1611, 0 3px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,240,210,.2);
-}
-.ch-btn.active{border-color:var(--glow)}
-.ch-btn.active .dot{background:var(--glow);box-shadow:0 0 10px var(--glow)}
-.ch-btn.active{
-  box-shadow:0 5px 0 #1c1611, 0 0 18px -2px var(--glow), inset 0 1px 0 rgba(255,240,210,.35);
-}
-.ch-btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
-
-/* ---------- transport control strip ---------- */
-.ctl-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
-.ctl{
-  cursor:pointer;border:1px solid #171310;border-radius:10px;padding:11px 4px;
-  color:#ffd9a0;background:linear-gradient(#4e4438,#332b22);
-  box-shadow:0 4px 0 #1c1611, 0 7px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,240,210,.28);
-  font-family:var(--px);font-size:8px;letter-spacing:1px;
-  transition:transform .07s, box-shadow .07s, filter .2s;
-}
-.ctl:hover{filter:brightness(1.15)}
-.ctl:active{transform:translateY(3px);box-shadow:0 1px 0 #1c1611, 0 3px 6px rgba(0,0,0,.45)}
-.ctl:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
-.ctl-viewall{
-  color:#1d1408;background:linear-gradient(#ffcf7d,#f0a13c);
-  box-shadow:0 4px 0 #8a5a1c, 0 7px 14px rgba(255,176,58,.25), inset 0 1px 0 rgba(255,255,255,.5);
-}
-.ctl-viewall:active{box-shadow:0 1px 0 #8a5a1c, 0 3px 8px rgba(0,0,0,.4)}
-.ctl-icon{font-size:13px;padding:9px 4px;line-height:1.2}
 
 /* ---------- the little hint ---------- */
 .hint{
@@ -347,7 +309,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
   .demo-note{display:none}
 }
 
-/* ---------- toast (demo fallback) ---------- */
+/* ---------- toast ---------- */
 .toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
   background:#141021;border:1px solid rgba(255,176,58,.5);color:#ffd9a0;
@@ -357,10 +319,13 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ---------- calm mode ---------- */
 @media (prefers-reduced-motion: reduce){
   .fx-flicker,.fx-sheen,.hint,.mote{animation:none !important}
   .hint{display:none}
+}
+@media (max-width:520px){
+  .deck{flex-wrap:wrap;justify-content:center}
+  .abtns{order:3;width:100%;justify-content:center;margin-top:4px}
 }
 </style>
 </head>
@@ -371,7 +336,7 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
   <div class="table"></div>
   <div class="table-wash"></div>
 
-  <p class="demo-kicker"><b>RETRO TV</b> &middot; INTERACTIVE DEMO</p>
+  <p class="demo-kicker"><b>POCKET PIXEL</b> &middot; INTERACTIVE DEMO</p>
 
   <main class="tv-scene">
     <div class="tv" id="tv">
@@ -382,12 +347,8 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
         </svg>
       </div>
 
-      <div class="antenna" aria-hidden="true">
-        <i class="a-l"></i><i class="a-r"></i><i class="a-base"></i>
-      </div>
-
-      <div class="cabinet">
-        <div class="screen-bezel">
+      <div class="boy">
+        <div class="boy-screen-bezel">
           <div class="screen dead" id="screen">
             <div class="tube" id="tube">
               <video id="tvVideo" muted playsinline preload="none" disablepictureinpicture></video>
@@ -403,28 +364,40 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
           </div>
         </div>
 
-        <div class="panel-row">
-          <div class="panel-spacer"></div>
-          <div class="dial-block">
-            <div class="dial" id="dial"><span class="dial-pointer"></span></div>
-            <span class="dial-label">CHANNEL</span>
+        <div class="deck">
+          <div class="dpad" role="group" aria-label="D-pad: up and down change channel, left and right change item">
+            <span class="bar v"></span><span class="bar h"></span><span class="dp-center"></span>
+            <button class="dp up" data-k="up" aria-label="Previous channel">&#9650;</button>
+            <button class="dp down" data-k="down" aria-label="Next channel">&#9660;</button>
+            <button class="dp left" data-k="left" aria-label="Previous item">&#9664;</button>
+            <button class="dp right" data-k="right" aria-label="Next item">&#9654;</button>
           </div>
-          <div class="power-block">
-            <button class="power" id="powerBtn" aria-label="Power on or off">
-              <span class="led"></span>&#9167;
-            </button>
-            <span class="power-label">POWER</span>
+
+          <div class="deck-mid">
+            <div class="deck-title" id="deckTitle">REELS</div>
+            <div class="deck-sub" id="deckSub">CH 01 / 05</div>
+            <div class="pills">
+              <div class="pill-wrap">
+                <button class="pill" id="btnPlay">SELECT</button>
+                <span class="pill-label">PLAY/PAUSE</span>
+              </div>
+              <div class="pill-wrap">
+                <button class="pill" id="btnAll">START</button>
+                <span class="pill-label">GALLERY</span>
+              </div>
+            </div>
           </div>
+
+          <div class="abtns" id="chRow" role="group" aria-label="Channels"></div>
         </div>
-        <div class="speaker" aria-hidden="true"></div>
 
-        <div class="ch-row" id="chRow" role="group" aria-label="Channels"></div>
-
-        <div class="ctl-row">
-          <button class="ctl ctl-icon" id="btnPrev" aria-label="Previous item">&#9198;</button>
-          <button class="ctl ctl-icon" id="btnPlay" aria-label="Play or pause">&#9208;</button>
-          <button class="ctl ctl-icon" id="btnNext" aria-label="Next item">&#9197;</button>
-          <button class="ctl ctl-viewall" id="btnAll" aria-label="View full gallery">VIEW ALL</button>
+        <div class="boy-foot">
+          <button class="mini-power" id="powerBtn" aria-label="Power on or off">
+            <span class="led"></span>&#9167;
+          </button>
+          <div class="speaker-dots" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
         </div>
       </div>
     </div>
@@ -435,10 +408,9 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
   </section>
 
   <p class="demo-note">
-    Press the chunky buttons to change channels. Videos play, posters cycle.
-    <b>VIEW ALL</b> opens the full gallery for that channel.
-    On the live site this wires straight into your existing gallery &mdash;
-    this demo page is <code>tv-demo.html</code> in your repo.
+    D-pad up/down changes channel, left/right flips through pieces.
+    The round buttons jump straight to a channel. <b>START</b> opens the full gallery.
+    This demo page is <code>tv-demo.html</code> in your repo.
   </p>
 </div>
 
@@ -446,9 +418,9 @@ body:not(.tv-off) .led{background:#69ff7a;box-shadow:0 0 8px rgba(105,255,122,.9
 
 <script>
 /* ============================================================
-   EDIT ME: your channels. One entry per button.
+   EDIT ME: your channels. One entry per round button.
    key   -> must match your gallery key (openSquareMenu key)
-   tint  -> the glow colour for this channel
+   tint  -> the button + glow colour for this channel
    items -> videos play, images cycle. 3-4 each is plenty.
    ============================================================ */
 const CHANNELS = [
@@ -480,29 +452,26 @@ const CHANNELS = [
 ];
 
 /* ============================================================
-   TV ENGINE
+   HANDHELD ENGINE
    ============================================================ */
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const tv = document.getElementById('tv');
 const screen = document.getElementById('screen');
-const tube = document.getElementById('tube');
 const tvVideo = document.getElementById('tvVideo');
 const tvImage = document.getElementById('tvImage');
 const staticCv = document.getElementById('staticCv');
 const sx = staticCv.getContext('2d');
 const osdEl = document.getElementById('osd');
-const dial = document.getElementById('dial');
+const deckTitle = document.getElementById('deckTitle');
+const deckSub = document.getElementById('deckSub');
 const powerBtn = document.getElementById('powerBtn');
-const btnPrev = document.getElementById('btnPrev');
 const btnPlay = document.getElementById('btnPlay');
-const btnNext = document.getElementById('btnNext');
 const btnAll = document.getElementById('btnAll');
 const chRow = document.getElementById('chRow');
 const mTiles = document.getElementById('mTiles');
 const hint = document.getElementById('hint');
 const toastEl = document.getElementById('toast');
 
-const DIAL_ANGLES = [-54, -27, 0, 27, 54];
 const state = { ch: 0, idx: 0, playing: true };
 let powerOn = false, tuneToken = 0, tvVisible = true;
 
@@ -592,7 +561,7 @@ tvVideo.addEventListener('ended', ()=>{ if(state.playing && powerOn) stepItem(1)
 
 /* ---------- channel surfing ---------- */
 function markButtons(){
-  document.querySelectorAll('.ch-btn').forEach((b,k)=>{
+  document.querySelectorAll('.abtn').forEach((b,k)=>{
     b.classList.toggle('active', k === state.ch);
     b.setAttribute('aria-pressed', k === state.ch ? 'true' : 'false');
   });
@@ -602,9 +571,10 @@ async function tune(i, opts={}){
   const my = ++tuneToken;
   if(!opts.auto && !opts.initial){ dismissHint(); stopAttract(); }
   const ch = CHANNELS[i];
-  state.ch = i; state.playing = true; updatePlayBtn();
+  state.ch = i; state.playing = true;
   document.documentElement.style.setProperty('--glow', ch.tint);
-  dial.style.transform = `rotate(${DIAL_ANGLES[i]}deg)`;
+  deckTitle.textContent = ch.label.toUpperCase();
+  deckSub.textContent = `CH 0${i+1} / 0${CHANNELS.length}`;
   markButtons();
   staticStart();
   await Promise.all([showItem(0), wait(opts.quick ? 300 : 560)]);
@@ -629,8 +599,7 @@ async function stepItem(d){
   pokeIdle();
 }
 
-/* ---------- transport controls ---------- */
-function updatePlayBtn(){ btnPlay.innerHTML = state.playing ? '&#9208;' : '&#9654;'; }
+/* ---------- transport: SELECT = play/pause, START = gallery ---------- */
 function togglePlay(){
   if(!powerOn) return;
   state.playing = !state.playing;
@@ -640,7 +609,6 @@ function togglePlay(){
   } else {
     if(state.playing) armImgTimer(); else clearImgTimer();
   }
-  updatePlayBtn();
   osd(state.playing ? 'PLAY' : 'PAUSED', 900);
   pokeIdle();
 }
@@ -650,10 +618,17 @@ function viewAll(){
   else toast(`${ch.label} gallery would open here on the live site`);
   pokeIdle();
 }
-btnPrev.addEventListener('click', ()=>stepItem(-1));
-btnNext.addEventListener('click', ()=>stepItem(1));
 btnPlay.addEventListener('click', togglePlay);
 btnAll.addEventListener('click', viewAll);
+
+/* ---------- D-pad ---------- */
+document.querySelectorAll('.dp').forEach(b=>b.addEventListener('click', ()=>{
+  const k = b.dataset.k;
+  if(k === 'up') tune((state.ch + CHANNELS.length - 1) % CHANNELS.length);
+  else if(k === 'down') tune((state.ch + 1) % CHANNELS.length);
+  else if(k === 'left') stepItem(-1);
+  else stepItem(1);
+}));
 
 /* ---------- power ---------- */
 async function setPower(on){
@@ -667,7 +642,6 @@ async function setPower(on){
     await wait(RM ? 60 : 700);
     screen.classList.remove('warming');
     tune(state.ch, { quick:true, initial:true });
-    // warm the image cache after power-on so later channel hops feel instant
     setTimeout(()=>{
       CHANNELS.forEach(ch=>ch.items.forEach(it=>{
         if(it.type === 'image'){ const p = new Image(); p.src = it.src; }
@@ -753,18 +727,15 @@ document.addEventListener('visibilitychange', ()=>{
   }
 });
 
-/* ---------- build buttons + mobile tiles ---------- */
+/* ---------- build round channel buttons + mobile tiles ---------- */
 CHANNELS.forEach((ch, i)=>{
   const b = document.createElement('button');
-  b.className = 'ch-btn';
+  b.className = 'abtn';
+  b.style.setProperty('--c', ch.tint);
   b.setAttribute('aria-pressed', 'false');
   b.setAttribute('aria-label', `Channel ${i+1}: ${ch.label}`);
-  b.innerHTML = `<span class="dot"></span><span class="num">0${i+1}</span><span class="lbl">${ch.label.toUpperCase()}</span>`;
-  b.addEventListener('click', ()=>{
-    b.classList.add('pressed');
-    setTimeout(()=>b.classList.remove('pressed'), 170);
-    tune(i);
-  });
+  b.textContent = i + 1;
+  b.addEventListener('click', ()=>tune(i));
   chRow.appendChild(b);
 
   const t = document.createElement('button');
@@ -777,8 +748,7 @@ CHANNELS.forEach((ch, i)=>{
   mTiles.appendChild(t);
 });
 
-/* ---------- warm up the set ---------- */
-updatePlayBtn();
+/* ---------- warm up ---------- */
 setTimeout(()=>setPower(true), 700);
 </script>
 </body>
