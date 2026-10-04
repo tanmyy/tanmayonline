@@ -680,7 +680,9 @@
 #hh .world[data-w="2"]{--chip:#b98aff}
 #hh .world[data-w="3"]{--chip:#5fd08f}
 #hh .world[data-w="4"]{--chip:#e08ac0}
-#hh .stage{width:100%;max-width:250px;margin:0 auto}
+#hh .stage{width:100%;max-width:300px;margin:0 auto}
+@media (max-height:820px){#hh .stage{max-width:250px}}
+@media (min-height:821px){#hh .chname{font-size:8px}}
 
   </style>
 </head>
@@ -721,6 +723,7 @@
           </div>
         </div>
         <div>
+                  <div>
                   <div>
                   <div>
           <div id="hh" class="off">
@@ -807,6 +810,7 @@
   </div>
             <div class="toast" id="toast" role="status"></div>
           </div>
+        </div>
         </div>
         </div>
         </div>
