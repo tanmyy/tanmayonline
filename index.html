@@ -1737,10 +1737,11 @@ function stopBombard(){
 async function loseSeq(){
   BTL.over=true;
   meSprite.classList.add('fainted');
-  await bSay('TANMAY fainted!');
+  bText.textContent='TANMAY fainted!';
+  bCursor.style.visibility='hidden';
+  await wait(1400);
   if(mode!=='battle') return;
   bText.textContent='AI SLOP bombards you with endless slop!';
-  bCursor.style.visibility='hidden';
   startBombard();
   await wait(2800);
   stopBombard();
