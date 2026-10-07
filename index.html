@@ -545,7 +545,9 @@
 }#hh.off .pokeball-btn::before{display:none}#hh.off .pokeball-btn::after{background:#6a6a6a;border-color:#0b0b0b;box-shadow:none}@media (prefers-reduced-motion: reduce){#hh .pokeball-btn::before{display:none}}#hh .battle{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;
   background:linear-gradient(#191a3d 0%,#23245c 60%,#2c1e56 100%);overflow:hidden}#hh .battle.on{display:flex}#hh.off .battle{display:none}#hh .b-field{position:relative;flex:1;overflow:hidden}#hh .b-foebox{position:absolute;top:4%;left:4%;width:58%;background:#f8f8f0;border:3px solid #222;
   border-radius:8px;padding:6px 8px;box-shadow:3px 3px 0 rgba(0,0,0,.35)}#hh .b-mebox{position:absolute;bottom:5%;right:4%;width:58%;background:#f8f8f0;border:3px solid #222;
-  border-radius:8px;padding:6px 8px;box-shadow:3px 3px 0 rgba(0,0,0,.35)}#hh .b-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}#hh .b-name{font-family:var(--px);font-size:11px;color:#222;letter-spacing:1px}#hh .b-lv{font-family:var(--px);font-size:9px;color:#555}#hh .b-hpwrap{display:flex;align-items:center;gap:6px}#hh .b-hplabel{font-family:var(--px);font-size:8px;color:#c98a1b}#hh .b-hpbar{flex:1;height:10px;border:2px solid #222;border-radius:6px;background:#5a5a5a;overflow:hidden}#hh .b-hpfill{display:block;height:100%;width:100%;border-radius:3px;transition:width .6s steps(14)}#hh .b-hpfill.hp-g{background:linear-gradient(#7dff6a,#2ecc40)}#hh .b-hpfill.hp-y{background:linear-gradient(#ffe066,#f0a500)}#hh .b-hpfill.hp-r{background:linear-gradient(#ff6b6b,#d9382a)}#hh .b-foe{position:absolute;top:9%;right:7%;width:30%;animation:foefloat 2.2s steps(4) infinite}#hh .b-foe svg, #hh .b-me svg{display:block;width:100%;height:auto;image-rendering:pixelated}#hh .b-me{position:absolute;bottom:9%;left:7%;width:26%;animation:mebob 1.6s steps(2) infinite}#hh .b-me .f2{display:none}#hh .b-shadow{position:absolute;left:8%;right:8%;bottom:-7%;height:12%;background:rgba(0,0,0,.35);
+  border-radius:8px;padding:6px 8px;box-shadow:3px 3px 0 rgba(0,0,0,.35)}#hh .b-prompt{position:absolute;right:4%;bottom:23%;z-index:4;display:none;max-width:62%;
+  font-family:var(--px);font-size:9px;letter-spacing:1px;color:#ffe066;text-align:right;line-height:1.6;
+  text-shadow:2px 2px 0 #000;background:rgba(0,0,0,.5);padding:5px 9px;border-radius:6px}#hh .b-prompt.on{display:block}#hh .b-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}#hh .b-name{font-family:var(--px);font-size:11px;color:#222;letter-spacing:1px}#hh .b-lv{font-family:var(--px);font-size:9px;color:#555}#hh .b-hpwrap{display:flex;align-items:center;gap:6px}#hh .b-hplabel{font-family:var(--px);font-size:8px;color:#c98a1b}#hh .b-hpbar{flex:1;height:10px;border:2px solid #222;border-radius:6px;background:#5a5a5a;overflow:hidden}#hh .b-hpfill{display:block;height:100%;width:100%;border-radius:3px;transition:width .6s steps(14)}#hh .b-hpfill.hp-g{background:linear-gradient(#7dff6a,#2ecc40)}#hh .b-hpfill.hp-y{background:linear-gradient(#ffe066,#f0a500)}#hh .b-hpfill.hp-r{background:linear-gradient(#ff6b6b,#d9382a)}#hh .b-foe{position:absolute;top:9%;right:7%;width:30%;animation:foefloat 2.2s steps(4) infinite}#hh .b-foe svg, #hh .b-me svg{display:block;width:100%;height:auto;image-rendering:pixelated}#hh .b-me{position:absolute;bottom:9%;left:7%;width:26%;animation:mebob 1.6s steps(2) infinite}#hh .b-me .f2{display:none}#hh .b-shadow{position:absolute;left:8%;right:8%;bottom:-7%;height:12%;background:rgba(0,0,0,.35);
   border-radius:50%;filter:blur(2px)}@keyframes foefloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}@keyframes mebob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}#hh .b-foe.glitch{animation:glitch .35s steps(2) 2}@keyframes glitch{0%{transform:translate(0)}25%{transform:translate(-4px,2px)}50%{transform:translate(4px,-2px)}75%{transform:translate(-2px,-2px)}100%{transform:translate(0)}}#hh .b-foe.hit, #hh .b-me.hit{animation:hitflash .12s steps(2) 4}@keyframes hitflash{50%{opacity:.15}}#hh .b-foe.lunge{animation:foelunge .28s steps(3)}@keyframes foelunge{40%{transform:translate(-26%,18%)}}#hh .b-me.lunge{animation:melunge .28s steps(3)}@keyframes melunge{40%{transform:translate(26%,-18%)}}#hh .b-foe.fainted, #hh .b-me.fainted{animation:faint .7s steps(6) forwards}@keyframes faint{to{transform:translateY(46px);opacity:0}}#hh .b-dmg{position:absolute;top:-14%;left:50%;transform:translateX(-50%);z-index:5;
   font-family:var(--px);font-size:15px;color:#ffe066;text-shadow:2px 2px 0 #7a2d00;
   animation:dmgfloat .9s steps(9) forwards;pointer-events:none;white-space:nowrap}@keyframes dmgfloat{to{transform:translate(-50%,-30px);opacity:0}}#hh .b-bombard{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden;display:none}#hh .b-bombard.on{display:block}#hh .b-slopbit{position:absolute;top:-20%;animation:slopfall 1.7s steps(14) forwards}#hh .b-slopbit svg{display:block;width:100%;height:auto;image-rendering:pixelated}@keyframes slopfall{to{transform:translateY(150%)}}#hh .b-field.shake{animation:bshake .5s steps(4)}@keyframes bshake{25%{transform:translate(-4px,3px)}50%{transform:translate(4px,-3px)}75%{transform:translate(-3px,-2px)}}#hh .b-dialog{position:relative;height:35%;background:#f8f8f0;border-top:4px solid #222;
@@ -764,6 +766,7 @@
                 <div class="b-row"><span class="b-name">TANMAY</span><span class="b-lv">Lv50</span></div>
                 <div class="b-hpwrap"><span class="b-hplabel">HP</span><div class="b-hpbar"><span class="b-hpfill hp-g" id="meHPFill"></span></div></div>
               </div>
+              <div class="b-prompt" id="bPrompt"></div>
             </div>
             <div class="b-dialog" id="bDialog">
               <p class="b-text" id="bText"></p>
@@ -1402,7 +1405,7 @@ const world=$('world'), frameWrap=$('frameWrap'),
   battleEl=$('battle'), bDialog=$('bDialog'), bText=$('bText'), bCursor=$('bCursor'),
   bAttacks=$('bAttacks'), foeHPFill=$('foeHPFill'), meHPFill=$('meHPFill'),
   foeSprite=$('foeSprite'), meSprite=$('meSprite'), pokeBtn=$('pokePower'),
-  bBombard=$('bBombard'), bField=$('bField');
+  bBombard=$('bBombard'), bField=$('bField'), bPrompt=$('bPrompt');
 
 const state = { w:0, i:0, playing:true, score:0, power:false, interacted:false, blockHits:0, bonus:false };
 let token = 0, screenVisible = true, autoT = null, mode = 'gallery'; /* gallery | battle | off */
@@ -1607,10 +1610,12 @@ function setHP(fill,pct){
 }
 function bSay(t){
   bText.textContent=t; bCursor.style.visibility='visible'; bAttacks.hidden=true;
+  bPrompt.classList.remove('on');
   return new Promise(res=>{ bTapResolve=res; });
 }
 function bChoices(t){
   bText.textContent=t; bCursor.style.visibility='hidden'; bAttacks.hidden=false;
+  bPrompt.textContent=t; bPrompt.classList.add('on');
 }
 bDialog.addEventListener('click',()=>{
   if(bTapResolve){ const r=bTapResolve; bTapResolve=null; r(); }
@@ -1620,6 +1625,7 @@ bAttacks.querySelectorAll('button').forEach(btn=>{
     e.stopPropagation();
     if(BTL.busy||BTL.over||mode!=='battle') return;
     bAttacks.hidden=true;
+    bPrompt.classList.remove('on');
     playerTurn(+btn.dataset.atk);
   });
 });
@@ -1636,12 +1642,14 @@ function flash(el){
 function hideBattle(){
   battleEl.classList.remove('on');
   battleEl.setAttribute('aria-hidden','true');
+  bPrompt.classList.remove('on');
   if(bTapResolve){ const r=bTapResolve; bTapResolve=null; r(); }
   BTL.active=false;
 }
 async function startBattle(){
   mode='battle';
   wVideo.pause();
+  pressStart.classList.add('gone');
   meSprite.querySelectorAll('svg').forEach(s=>s.remove());
   meSprite.prepend(document.querySelector('#char svg').cloneNode(true));
   BTL.active=true; BTL.over=false; BTL.busy=false;
