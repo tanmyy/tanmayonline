@@ -530,17 +530,25 @@
   border:3px solid #141414;
   box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 2px 4px rgba(255,255,255,.35);
   transition:transform .08s;
-}#hh .pokeball-btn::after{
+}#hh .pokeball-btn::before{
+  content:'';position:absolute;inset:-8px;border-radius:50%;pointer-events:none;
+  border:3px solid rgba(255,90,90,.9);
+  animation:ringpulse 1.8s ease-out infinite;
+}@keyframes ringpulse{0%{transform:scale(.65);opacity:1}100%{transform:scale(1.3);opacity:0}}#hh .pokeball-btn::after{
   content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   width:13px;height:13px;border-radius:50%;background:#f4f4f4;border:3px solid #141414;
   box-shadow:0 0 8px 2px rgba(125,255,106,.9);
-}#hh.off .pokeball-btn::after{box-shadow:none;background:#8f8f8f}#hh .pokeball-btn:active{transform:translateX(-50%) scale(.9)}#hh .pokeball-btn:focus-visible{outline:3px solid #b03a28;outline-offset:2px}#hh .battle{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;
+}#hh .pokeball-btn:hover{transform:translateX(-50%) scale(1.12)}#hh .pokeball-btn:active{transform:translateX(-50%) scale(.9)}#hh .pokeball-btn:focus-visible{outline:3px solid #b03a28;outline-offset:2px}#hh.off .pokeball-btn{
+  background:linear-gradient(to bottom,#2e2e2e 0%,#2e2e2e 44%,#0b0b0b 44%,#0b0b0b 56%,#3d3d3d 56%,#3d3d3d 100%);
+  border-color:#0b0b0b;
+  box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 2px 4px rgba(255,255,255,.08);
+}#hh.off .pokeball-btn::before{display:none}#hh.off .pokeball-btn::after{background:#6a6a6a;border-color:#0b0b0b;box-shadow:none}@media (prefers-reduced-motion: reduce){#hh .pokeball-btn::before{display:none}}#hh .battle{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;
   background:linear-gradient(#191a3d 0%,#23245c 60%,#2c1e56 100%);overflow:hidden}#hh .battle.on{display:flex}#hh.off .battle{display:none}#hh .b-field{position:relative;flex:1;overflow:hidden}#hh .b-foebox{position:absolute;top:4%;left:4%;width:58%;background:#f8f8f0;border:3px solid #222;
   border-radius:8px;padding:6px 8px;box-shadow:3px 3px 0 rgba(0,0,0,.35)}#hh .b-mebox{position:absolute;bottom:5%;right:4%;width:58%;background:#f8f8f0;border:3px solid #222;
   border-radius:8px;padding:6px 8px;box-shadow:3px 3px 0 rgba(0,0,0,.35)}#hh .b-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}#hh .b-name{font-family:var(--px);font-size:11px;color:#222;letter-spacing:1px}#hh .b-lv{font-family:var(--px);font-size:9px;color:#555}#hh .b-hpwrap{display:flex;align-items:center;gap:6px}#hh .b-hplabel{font-family:var(--px);font-size:8px;color:#c98a1b}#hh .b-hpbar{flex:1;height:10px;border:2px solid #222;border-radius:6px;background:#5a5a5a;overflow:hidden}#hh .b-hpfill{display:block;height:100%;width:100%;border-radius:3px;transition:width .6s steps(14)}#hh .b-hpfill.hp-g{background:linear-gradient(#7dff6a,#2ecc40)}#hh .b-hpfill.hp-y{background:linear-gradient(#ffe066,#f0a500)}#hh .b-hpfill.hp-r{background:linear-gradient(#ff6b6b,#d9382a)}#hh .b-foe{position:absolute;top:9%;right:7%;width:30%;animation:foefloat 2.2s steps(4) infinite}#hh .b-foe svg, #hh .b-me svg{display:block;width:100%;height:auto;image-rendering:pixelated}#hh .b-me{position:absolute;bottom:9%;left:7%;width:26%;animation:mebob 1.6s steps(2) infinite}#hh .b-me .f2{display:none}#hh .b-shadow{position:absolute;left:8%;right:8%;bottom:-7%;height:12%;background:rgba(0,0,0,.35);
   border-radius:50%;filter:blur(2px)}@keyframes foefloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}@keyframes mebob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}#hh .b-foe.glitch{animation:glitch .35s steps(2) 2}@keyframes glitch{0%{transform:translate(0)}25%{transform:translate(-4px,2px)}50%{transform:translate(4px,-2px)}75%{transform:translate(-2px,-2px)}100%{transform:translate(0)}}#hh .b-foe.hit, #hh .b-me.hit{animation:hitflash .12s steps(2) 4}@keyframes hitflash{50%{opacity:.15}}#hh .b-foe.lunge{animation:foelunge .28s steps(3)}@keyframes foelunge{40%{transform:translate(-26%,18%)}}#hh .b-me.lunge{animation:melunge .28s steps(3)}@keyframes melunge{40%{transform:translate(26%,-18%)}}#hh .b-foe.fainted, #hh .b-me.fainted{animation:faint .7s steps(6) forwards}@keyframes faint{to{transform:translateY(46px);opacity:0}}#hh .b-dmg{position:absolute;top:-14%;left:50%;transform:translateX(-50%);z-index:5;
   font-family:var(--px);font-size:15px;color:#ffe066;text-shadow:2px 2px 0 #7a2d00;
-  animation:dmgfloat .9s steps(9) forwards;pointer-events:none;white-space:nowrap}@keyframes dmgfloat{to{transform:translate(-50%,-30px);opacity:0}}#hh .b-dialog{position:relative;height:35%;background:#f8f8f0;border-top:4px solid #222;
+  animation:dmgfloat .9s steps(9) forwards;pointer-events:none;white-space:nowrap}@keyframes dmgfloat{to{transform:translate(-50%,-30px);opacity:0}}#hh .b-bombard{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden;display:none}#hh .b-bombard.on{display:block}#hh .b-slopbit{position:absolute;top:-20%;animation:slopfall 1.7s steps(14) forwards}#hh .b-slopbit svg{display:block;width:100%;height:auto;image-rendering:pixelated}@keyframes slopfall{to{transform:translateY(150%)}}#hh .b-field.shake{animation:bshake .5s steps(4)}@keyframes bshake{25%{transform:translate(-4px,3px)}50%{transform:translate(4px,-3px)}75%{transform:translate(-3px,-2px)}}#hh .b-dialog{position:relative;height:35%;background:#f8f8f0;border-top:4px solid #222;
   padding:12px 14px;cursor:pointer}#hh .b-text{font-family:var(--px);font-size:12px;line-height:1.9;color:#222;margin:0;min-height:3.8em}#hh .b-cursor{position:absolute;right:12px;bottom:8px;font-size:12px;color:#222;animation:bblink .7s steps(2) infinite}@keyframes bblink{50%{opacity:0}}#hh .b-attacks{position:absolute;inset:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}#hh .b-attacks button{
   font-family:var(--px);cursor:pointer;background:#fff;border:3px solid #222;border-radius:8px;
   padding:6px 4px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;
@@ -653,7 +661,7 @@
           <div id="hh" class="off">
 <div class="stage">
     <div class="console" id="console">
-      <button class="pokeball-btn" id="pokePower" type="button" aria-label="Power button: gallery, battle, off"></button>
+      <button class="pokeball-btn" id="pokePower" type="button" aria-label="Power button: gallery, battle, off" title="Power: gallery / battle / off"></button>
       <div class="shell-print" aria-hidden="true"><i></i><i></i><i></i></div>
 
       <div class="bezel">
@@ -720,9 +728,10 @@
 
           <div class="wipe" id="wipe"></div>
           <div class="battle" id="battle" aria-hidden="true">
-            <div class="b-field">
+            <div class="b-field" id="bField">
+              <div class="b-bombard" id="bBombard" aria-hidden="true"></div>
               <div class="b-foebox">
-                <div class="b-row"><span class="b-name">AI ART</span><span class="b-lv">Lv??</span></div>
+                <div class="b-row"><span class="b-name">AI SLOP</span><span class="b-lv">Lv??</span></div>
                 <div class="b-hpwrap"><span class="b-hplabel">HP</span><div class="b-hpbar"><span class="b-hpfill hp-g" id="foeHPFill"></span></div></div>
               </div>
               <div class="b-foe" id="foeSprite">
@@ -1392,7 +1401,8 @@ const world=$('world'), frameWrap=$('frameWrap'),
   pressStart=$('pressStart'), boot=$('boot'), toastEl=$('toast'), screenEl=$('screen'),
   battleEl=$('battle'), bDialog=$('bDialog'), bText=$('bText'), bCursor=$('bCursor'),
   bAttacks=$('bAttacks'), foeHPFill=$('foeHPFill'), meHPFill=$('meHPFill'),
-  foeSprite=$('foeSprite'), meSprite=$('meSprite'), pokeBtn=$('pokePower');
+  foeSprite=$('foeSprite'), meSprite=$('meSprite'), pokeBtn=$('pokePower'),
+  bBombard=$('bBombard'), bField=$('bField');
 
 const state = { w:0, i:0, playing:true, score:0, power:false, interacted:false, blockHits:0, bonus:false };
 let token = 0, screenVisible = true, autoT = null, mode = 'gallery'; /* gallery | battle | off */
@@ -1583,9 +1593,10 @@ const ATKS=[
   {n:'COPYRIGHT STRIKE',a:5,b:28},
 ];
 const FOEMS=[
-  {n:'DIFFUSION BLAST',a:10,b:18},
-  {n:'STYLE STEAL',a:8,b:16},
-  {n:'DATASET SCRAPE',a:12,b:22},
+  {n:'11 FINGERS',a:10,b:18},
+  {n:'MELTED HANDS',a:8,b:16},
+  {n:'WATERMARK SLAP',a:12,b:22},
+  {n:'SAME-FACE SYNDROME',a:9,b:17},
 ];
 const brnd=(a,b)=>a+((Math.random()*(b-a+1))|0);
 let bTapResolve=null;
@@ -1642,7 +1653,7 @@ async function startBattle(){
   battleEl.classList.add('on');
   battleEl.setAttribute('aria-hidden','false');
   bAttacks.hidden=true;
-  await bSay('Wild AI ART appeared!');
+  await bSay('Wild AI SLOP appeared!');
   await bSay('Go! TANMAY!');
   if(mode!=='battle') return;
   bChoices('Choose an attack!');
@@ -1667,9 +1678,9 @@ async function playerTurn(i){
   foeSprite.classList.add('glitch'); setTimeout(()=>foeSprite.classList.remove('glitch'),750);
   await wait(950); if(mode!=='battle'){BTL.busy=false;return;}
   if(BTL.ohp===0){ BTL.busy=false; return winSeq(); }
-  if(hung){ bText.textContent='AI ART hung on with 1 HP!'; await wait(900); if(mode!=='battle'){BTL.busy=false;return;} }
+  if(hung){ bText.textContent='AI SLOP hung on with 1 HP!'; await wait(900); if(mode!=='battle'){BTL.busy=false;return;} }
   const F=FOEMS[(Math.random()*FOEMS.length)|0];
-  bText.textContent='AI ART used '+F.n+'!';
+  bText.textContent='AI SLOP used '+F.n+'!';
   await wait(650); if(mode!=='battle'){BTL.busy=false;return;}
   foeSprite.classList.add('lunge'); await wait(300);
   foeSprite.classList.remove('lunge'); if(mode!=='battle'){BTL.busy=false;return;}
@@ -1690,20 +1701,51 @@ async function playerTurn(i){
 async function winSeq(){
   BTL.over=true;
   foeSprite.classList.add('fainted');
-  await bSay('AI ART fainted!');
-  await bSay('YOU WIN! Human creativity prevails!');
+  await bSay('AI SLOP fainted!');
+  await bSay('CONGRATS! YOU WON! Human creativity prevails!');
   if(mode!=='battle') return;
-  bText.textContent='Press the Poke Ball to power off...';
+  bText.textContent='Taking you back to the posters...';
   bCursor.style.visibility='hidden';
+  await wait(1400);
+  if(mode!=='battle') return;
+  hideBattle();
+  mode='gallery';
+  const pw=WORLDS.findIndex(w=>w.key==='posters');
+  setWorld(pw>=0?pw:0,{wipe:true});
+}
+function startBombard(){
+  const svg=foeSprite.querySelector('svg').outerHTML;
+  bBombard.innerHTML='';
+  for(let k=0;k<14;k++){
+    const s=document.createElement('span');
+    s.className='b-slopbit';
+    s.style.left=(Math.random()*86)+'%';
+    s.style.width=(9+Math.random()*11)+'%';
+    s.style.animationDelay=(Math.random()*1.1)+'s';
+    s.innerHTML=svg;
+    bBombard.appendChild(s);
+  }
+  bBombard.classList.add('on');
+  bField.classList.remove('shake'); void bField.offsetWidth; bField.classList.add('shake');
+}
+function stopBombard(){
+  bBombard.classList.remove('on');
+  bBombard.innerHTML='';
 }
 async function loseSeq(){
   BTL.over=true;
   meSprite.classList.add('fainted');
   await bSay('TANMAY fainted!');
-  await bSay('You blacked out... AI ART wins this round.');
   if(mode!=='battle') return;
-  bText.textContent='Press the Poke Ball to power off...';
+  bText.textContent='AI SLOP bombards you with endless slop!';
   bCursor.style.visibility='hidden';
+  startBombard();
+  await wait(2800);
+  stopBombard();
+  if(mode!=='battle') return;
+  hideBattle();
+  mode='off';
+  setPower(false);
 }
 /* pokeball power: gallery -> battle -> off -> gallery (posters) */
 pokeBtn.addEventListener('click',(e)=>{
