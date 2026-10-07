@@ -1602,6 +1602,14 @@ const FOEMS=[
   {n:'SAME-FACE SYNDROME',a:9,b:17},
 ];
 const brnd=(a,b)=>a+((Math.random()*(b-a+1))|0);
+/* pokemon-style effectiveness based on where the roll lands in the attack's range */
+function effMsg(A,d){
+  const t=(d-A.a)/((A.b-A.a)||1);
+  if(t>=0.75) return "It's super effective!";
+  if(t>=0.40) return "It's effective.";
+  if(t>=0.15) return "It's somewhat effective...";
+  return "It's not very effective...";
+}
 let bTapResolve=null;
 function setHP(fill,pct){
   pct=Math.max(0,Math.min(100,pct));
@@ -1672,7 +1680,7 @@ async function playerTurn(i){
   const A=ATKS[i];
   bText.textContent='TANMAY used '+A.n+'!';
   bCursor.style.visibility='hidden';
-  await wait(1000); if(mode!=='battle'){BTL.busy=false;return;}
+  await wait(1200); if(mode!=='battle'){BTL.busy=false;return;}
   meSprite.classList.add('lunge'); await wait(300);
   meSprite.classList.remove('lunge'); if(mode!=='battle'){BTL.busy=false;return;}
   const d=brnd(A.a,A.b);
@@ -1684,13 +1692,13 @@ async function playerTurn(i){
   }
   setHP(foeHPFill,BTL.ohp); flash(foeSprite); showDmg(foeSprite,d);
   foeSprite.classList.add('glitch'); setTimeout(()=>foeSprite.classList.remove('glitch'),750);
-  bText.textContent=A.n+' dealt '+d+' damage!';
-  await wait(1300); if(mode!=='battle'){BTL.busy=false;return;}
+  bText.textContent=effMsg(A,d);
+  await wait(1400); if(mode!=='battle'){BTL.busy=false;return;}
   if(BTL.ohp===0){ BTL.busy=false; return winSeq(); }
-  if(hung){ bText.textContent='AI SLOP hung on with 1 HP!'; await wait(900); if(mode!=='battle'){BTL.busy=false;return;} }
+  if(hung){ bText.textContent='AI SLOP hung on with 1 HP!'; await wait(1200); if(mode!=='battle'){BTL.busy=false;return;} }
   const F=FOEMS[(Math.random()*FOEMS.length)|0];
   bText.textContent='AI SLOP used '+F.n+'!';
-  await wait(1000); if(mode!=='battle'){BTL.busy=false;return;}
+  await wait(1200); if(mode!=='battle'){BTL.busy=false;return;}
   foeSprite.classList.add('lunge'); await wait(300);
   foeSprite.classList.remove('lunge'); if(mode!=='battle'){BTL.busy=false;return;}
   const d2=brnd(F.a,F.b);
@@ -1701,10 +1709,10 @@ async function playerTurn(i){
     else { BTL.php=0; }
   }
   setHP(meHPFill,BTL.php); flash(meSprite); showDmg(meSprite,d2);
-  bText.textContent=F.n+' hit TANMAY for '+d2+' damage!';
-  await wait(1300); if(mode!=='battle'){BTL.busy=false;return;}
+  bText.textContent=effMsg(F,d2);
+  await wait(1400); if(mode!=='battle'){BTL.busy=false;return;}
   if(BTL.php===0){ BTL.busy=false; return loseSeq(); }
-  if(hung2){ bText.textContent='TANMAY hung on with 1 HP!'; await wait(900); }
+  if(hung2){ bText.textContent='TANMAY hung on with 1 HP!'; await wait(1200); }
   BTL.busy=false;
   if(mode==='battle'&&!BTL.over) bChoices('Choose an attack!');
 }
