@@ -347,6 +347,9 @@ body{
             </div>
 
             <div class="media-fill" id="frameWrap">
+              <div class="stars" aria-hidden="true"></div>
+              <div class="stars2" aria-hidden="true"></div>
+              <div class="shoot" aria-hidden="true"></div>
               <video id="wVideo" muted playsinline loop preload="none"></video>
               <img id="wImage" alt="Showcase piece">
               <div class="about-card" id="aboutCard">
@@ -503,6 +506,41 @@ body.off .world{opacity:0}
 .media-fill.slide-r{animation:msr .3s steps(5)}
 @keyframes msl{from{transform:translateX(-24%);opacity:0}to{transform:none;opacity:1}}
 @keyframes msr{from{transform:translateX(24%);opacity:0}to{transform:none;opacity:1}}
+/* branding world: show the full picture, space-game backdrop fills the rest */
+.media-fill.brand-fit{background:radial-gradient(120% 90% at 50% 8%,#0c0c26 0%,#05050f 55%,#020208 100%)}
+.media-fill.brand-fit img{object-fit:contain;filter:drop-shadow(0 8px 26px rgba(0,0,0,.6))}
+.media-fill .stars,.media-fill .stars2,.media-fill .shoot{position:absolute;pointer-events:none;opacity:0;transition:opacity .5s}
+.media-fill .stars,.media-fill .stars2{inset:-60%;z-index:0}
+.media-fill.brand-fit .stars,.media-fill.brand-fit .stars2,.media-fill.brand-fit .shoot{opacity:1}
+.media-fill .stars{
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%,#ffffff,transparent),
+    radial-gradient(1px 1px at 68% 12%,#cfe4ff,transparent),
+    radial-gradient(1.5px 1.5px at 84% 38%,#ffffff,transparent),
+    radial-gradient(1px 1px at 32% 58%,#ffe9a8,transparent),
+    radial-gradient(1px 1px at 52% 74%,#ffffff,transparent),
+    radial-gradient(1.5px 1.5px at 8% 84%,#cfe4ff,transparent),
+    radial-gradient(1px 1px at 92% 66%,#ffffff,transparent),
+    radial-gradient(1px 1px at 44% 8%,#ffffff,transparent);
+  background-size:260px 260px;
+  animation:stardrift 70s linear infinite;
+}
+.media-fill .stars2{
+  background-image:
+    radial-gradient(2px 2px at 24% 40%,#ffffff,transparent),
+    radial-gradient(1.5px 1.5px at 76% 72%,#ffe9a8,transparent),
+    radial-gradient(2px 2px at 58% 18%,#cfe4ff,transparent),
+    radial-gradient(1.5px 1.5px at 14% 66%,#ffffff,transparent);
+  background-size:260px 260px;
+  animation:stardrift 110s linear infinite;
+}
+.media-fill.brand-fit .stars2{animation:stardrift 110s linear infinite,twinkle 3.4s ease-in-out infinite alternate}
+.media-fill .shoot{top:14%;left:-30%;width:130px;height:2px;z-index:0;
+  background:linear-gradient(90deg,#ffffff,rgba(255,255,255,0));transform:rotate(-24deg)}
+.media-fill.brand-fit .shoot{animation:shoot 8s linear infinite}
+@keyframes stardrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,260px,0)}}
+@keyframes twinkle{from{opacity:.3}to{opacity:1}}
+@keyframes shoot{0%,86%{opacity:0;transform:translate(0,0) rotate(-24deg)}89%{opacity:1}97%{opacity:0;transform:translate(340px,190px) rotate(-24deg)}100%{opacity:0;transform:translate(0,0) rotate(-24deg)}}
 .scrim-top{position:absolute;top:0;left:0;right:0;height:24%;z-index:5;pointer-events:none;
   background:linear-gradient(rgba(0,0,0,.5),transparent)}
 .scrim-bottom{position:absolute;bottom:0;left:0;right:0;height:28%;z-index:5;pointer-events:none;
@@ -611,6 +649,7 @@ async function showItem(j,dir=1,opts={}){
   const item=opts.bonus||W.items[state.i];
   state.bonus=!!opts.bonus;
   frameWrap.classList.remove('slide-l','slide-r');
+  frameWrap.classList.toggle('brand-fit',((opts.bonus&&opts.bonus.wkey)||W.key)==='branding');
   void frameWrap.offsetWidth;
   frameWrap.classList.add(dir>=0?'slide-r':'slide-l');
   showMedia(item, ()=>stepItem(1));
@@ -676,7 +715,7 @@ function hitBlock(){
     const pool=[];
     WORLDS.forEach((W2)=>{ W2.items.forEach((it)=>{ pool.push({w:W2,it:it}); }); });
     const pick=pool[(Math.random()*pool.length)|0]||{w:W,it:W.items[0]};
-    showItem(state.i,1,{bonus:{...pick.it,cap:'BONUS: '+(pick.it.cap||pick.w.label)}});
+    showItem(state.i,1,{bonus:{...pick.it,wkey:pick.w.key,cap:'BONUS: '+(pick.it.cap||pick.w.label)}});
   }
 }
 
