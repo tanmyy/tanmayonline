@@ -989,7 +989,7 @@ async function playerTurn(i){
   const A=ATKS[i];
   bText.textContent='TANMAY used '+A.n+'!';
   bCursor.style.visibility='hidden';
-  await wait(650); if(mode!=='battle'){BTL.busy=false;return;}
+  await wait(1000); if(mode!=='battle'){BTL.busy=false;return;}
   meSprite.classList.add('lunge'); await wait(300);
   meSprite.classList.remove('lunge'); if(mode!=='battle'){BTL.busy=false;return;}
   const d=brnd(A.a,A.b);
@@ -1001,12 +1001,13 @@ async function playerTurn(i){
   }
   setHP(foeHPFill,BTL.ohp); flash(foeSprite); showDmg(foeSprite,d);
   foeSprite.classList.add('glitch'); setTimeout(()=>foeSprite.classList.remove('glitch'),750);
-  await wait(950); if(mode!=='battle'){BTL.busy=false;return;}
+  bText.textContent=A.n+' dealt '+d+' damage!';
+  await wait(1300); if(mode!=='battle'){BTL.busy=false;return;}
   if(BTL.ohp===0){ BTL.busy=false; return winSeq(); }
   if(hung){ bText.textContent='AI SLOP hung on with 1 HP!'; await wait(900); if(mode!=='battle'){BTL.busy=false;return;} }
   const F=FOEMS[(Math.random()*FOEMS.length)|0];
   bText.textContent='AI SLOP used '+F.n+'!';
-  await wait(650); if(mode!=='battle'){BTL.busy=false;return;}
+  await wait(1000); if(mode!=='battle'){BTL.busy=false;return;}
   foeSprite.classList.add('lunge'); await wait(300);
   foeSprite.classList.remove('lunge'); if(mode!=='battle'){BTL.busy=false;return;}
   const d2=brnd(F.a,F.b);
@@ -1017,7 +1018,8 @@ async function playerTurn(i){
     else { BTL.php=0; }
   }
   setHP(meHPFill,BTL.php); flash(meSprite); showDmg(meSprite,d2);
-  await wait(950); if(mode!=='battle'){BTL.busy=false;return;}
+  bText.textContent=F.n+' hit TANMAY for '+d2+' damage!';
+  await wait(1300); if(mode!=='battle'){BTL.busy=false;return;}
   if(BTL.php===0){ BTL.busy=false; return loseSeq(); }
   if(hung2){ bText.textContent='TANMAY hung on with 1 HP!'; await wait(900); }
   BTL.busy=false;
