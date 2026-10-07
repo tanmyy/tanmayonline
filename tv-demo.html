@@ -314,6 +314,11 @@ body.off .battle{display:none}
   border-radius:8px;padding:6px 8px;box-shadow:3px 3px 0 rgba(0,0,0,.35)}
 .b-mebox{position:absolute;bottom:5%;right:4%;width:58%;background:#f8f8f0;border:3px solid #222;
   border-radius:8px;padding:6px 8px;box-shadow:3px 3px 0 rgba(0,0,0,.35)}
+/* prompt shown above the player's health card while choosing an attack */
+.b-prompt{position:absolute;right:4%;bottom:23%;z-index:4;display:none;max-width:62%;
+  font-family:var(--px);font-size:9px;letter-spacing:1px;color:#ffe066;text-align:right;line-height:1.6;
+  text-shadow:2px 2px 0 #000;background:rgba(0,0,0,.5);padding:5px 9px;border-radius:6px}
+.b-prompt.on{display:block}
 .b-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
 .b-name{font-family:var(--px);font-size:11px;color:#222;letter-spacing:1px}
 .b-lv{font-family:var(--px);font-size:9px;color:#555}
@@ -535,6 +540,7 @@ body.off .battle{display:none}
                 <div class="b-row"><span class="b-name">TANMAY</span><span class="b-lv">Lv50</span></div>
                 <div class="b-hpwrap"><span class="b-hplabel">HP</span><div class="b-hpbar"><span class="b-hpfill hp-g" id="meHPFill"></span></div></div>
               </div>
+              <div class="b-prompt" id="bPrompt"></div>
             </div>
             <div class="b-dialog" id="bDialog">
               <p class="b-text" id="bText"></p>
@@ -727,7 +733,7 @@ const world=$('world'), frameWrap=$('frameWrap'),
   battleEl=$('battle'), bDialog=$('bDialog'), bText=$('bText'), bCursor=$('bCursor'),
   bAttacks=$('bAttacks'), foeHPFill=$('foeHPFill'), meHPFill=$('meHPFill'),
   foeSprite=$('foeSprite'), meSprite=$('meSprite'), pokeBtn=$('pokePower'),
-  bBombard=$('bBombard'), bField=$('bField');
+  bBombard=$('bBombard'), bField=$('bField'), bPrompt=$('bPrompt');
 
 const state = { w:0, i:0, playing:true, score:0, power:false, interacted:false, blockHits:0, bonus:false };
 let token = 0, screenVisible = true, autoT = null, mode = 'gallery'; /* gallery | battle | off */
@@ -932,10 +938,12 @@ function setHP(fill,pct){
 }
 function bSay(t){
   bText.textContent=t; bCursor.style.visibility='visible'; bAttacks.hidden=true;
+  bPrompt.classList.remove('on');
   return new Promise(res=>{ bTapResolve=res; });
 }
 function bChoices(t){
   bText.textContent=t; bCursor.style.visibility='hidden'; bAttacks.hidden=false;
+  bPrompt.textContent=t; bPrompt.classList.add('on');
 }
 bDialog.addEventListener('click',()=>{
   if(bTapResolve){ const r=bTapResolve; bTapResolve=null; r(); }
@@ -945,6 +953,7 @@ bAttacks.querySelectorAll('button').forEach(btn=>{
     e.stopPropagation();
     if(BTL.busy||BTL.over||mode!=='battle') return;
     bAttacks.hidden=true;
+    bPrompt.classList.remove('on');
     playerTurn(+btn.dataset.atk);
   });
 });
@@ -961,12 +970,14 @@ function flash(el){
 function hideBattle(){
   battleEl.classList.remove('on');
   battleEl.setAttribute('aria-hidden','true');
+  bPrompt.classList.remove('on');
   if(bTapResolve){ const r=bTapResolve; bTapResolve=null; r(); }
   BTL.active=false;
 }
 async function startBattle(){
   mode='battle';
   wVideo.pause();
+  pressStart.classList.add('gone');
   meSprite.querySelectorAll('svg').forEach(s=>s.remove());
   meSprite.prepend(document.querySelector('#char svg').cloneNode(true));
   BTL.active=true; BTL.over=false; BTL.busy=false;
