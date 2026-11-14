@@ -293,6 +293,20 @@
       .btn { width: 100%; justify-content: center; }
     }
 
+    /* TABLET ONLY (iPad, 769-1024px) — desktop and mobile untouched.
+       At tablet widths the brand + 5 nav links + 2 buttons cannot fit in one
+       row: the brand wrapped, the pill buttons wrapped into tall ovals, and
+       the nav grew to two rows and clipped the hero headline. The site
+       already hides .nav-links below 768px with no hamburger, so hiding
+       them here matches the existing pattern. */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      nav { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .nav-brand { white-space: nowrap; font-size: 1rem; }
+      .nav-resume-btn, .nav-cta { white-space: nowrap; padding: 11px 20px; font-size: 0.72rem; }
+      .hero { padding: 150px 32px 60px; }
+    }
+
     /* GALLERY MODAL */
     .ugm-backdrop { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, 0.96); backdrop-filter: blur(16px) saturate(0.8); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1); padding: 20px; }
     .ugm-backdrop.open { opacity: 1; pointer-events: all; }
